@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="be.kdg.scoutsappadmin.ui.home_admin.HomeFragment_admin"
+        android:label="@string/menu_home_admin"
+        tools:layout="@layout/fragment_home_admin">
+
+        <action
+            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
+            app:destination="@id/nav_home_second" />
+        <action
+            android:id="@+id/action_nav_home_to_addPeriodeFragment"
+            app:destination="@id/addPeriodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_home_second"
+        android:name="be.kdg.scoutsappadmin.ui.home_admin.HomeSecondFragment"
+        android:label="@string/home_second"
+        tools:layout="@layout/fragment_home_second">
+        <action
+            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
+            app:destination="@id/nav_home" />
+
+        <argument
+            android:name="myArg"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="be.kdg.scoutsappadmin.ui.dag.DagFragment"
+        android:label="@string/menu_gallery_admin"
+        tools:layout="@layout/fragment_dag" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="be.kdg.scoutsappadmin.ui.log.LogFragment"
+        android:label="@string/menu_slideshow_admin"
+        tools:layout="@layout/fragment_groepsPaneel" />
+    <activity
+        android:id="@+id/addPeriodeFragment"
+        android:name="be.kdg.scoutsappadmin.ui."
+        android:label="addPeriodeFragment" />
+</navigation>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "247906228327",
+    "firebase_url": "https://scoutsdb-ec0ad.firebaseio.com",
+    "project_id": "scoutsdb-ec0ad",
+    "storage_bucket": "scoutsdb-ec0ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247906228327:android:6ba0249bae9f0e029d5cc2",
+        "android_client_info": {
+          "package_name": "be.kdg.scoutsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "247906228327-lklt3a4pd8f1r9lmnft3agjme29et9j7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvEsizd1sA8mk0kYi8bXoDkDqARUKLMps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "247906228327-lklt3a4pd8f1r9lmnft3agjme29et9j7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

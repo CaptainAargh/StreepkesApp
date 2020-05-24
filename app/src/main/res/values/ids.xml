@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="frgDag_Spinner_Periode" type="id" />
+    <item name="frgDag_txt_Tot" type="id" />
+    <item name="frgDag_txt_Van" type="id" />
+
+</resources>

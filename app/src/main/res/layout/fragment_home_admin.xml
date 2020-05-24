@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home_admin.HomeFragment_admin">
+
+    <EditText
+        android:id="@+id/frgHome_txt_persoonPass"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Wachtwoord"
+        android:inputType="textPersonName"
+        android:text="Wachtwoord"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_Spinner_selectRol"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgHome_txt_persoonName"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_txt_tot" />
+
+    <TextView
+        android:id="@+id/frgHome_lb_tot"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="tot"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_txt_tot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgHome_lb_van"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_Spinner_selectPeriode" />
+
+    <TextView
+        android:id="@+id/frgHome_lb_van"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="van"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_txt_Van"
+        app:layout_constraintEnd_toStartOf="@+id/frgHome_lb_tot"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_Spinner_selectPeriode" />
+
+    <TextView
+        android:id="@+id/frgHome_txt_Van"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="16 / 07 /2020"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_txt_persoonName"
+        app:layout_constraintEnd_toStartOf="@+id/frgHome_txt_tot"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_lb_van" />
+
+    <TextView
+        android:id="@+id/frgHome_txt_tot"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="31 / 07 / 2020"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_txt_persoonPass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgHome_txt_Van"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_lb_tot" />
+
+    <Button
+        android:id="@+id/frgHome_btn_addPersoon"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="19dp"
+        android:text="Voeg persoon toe aan periode"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_btn_addPeriode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_Spinner_selectRol" />
+
+    <TextView
+        android:id="@+id/frgHome_lb_Periode"
+        android:layout_width="352dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="Selecteer een periode"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_Spinner_selectPeriode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frgHome_rv_personen"
+        android:layout_width="413dp"
+        android:layout_height="199dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_btn_addPeriode" />
+
+    <Spinner
+        android:id="@+id/frgHome_Spinner_selectPeriode"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="600dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_lb_Periode" />
+
+    <EditText
+        android:id="@+id/frgHome_txt_persoonName"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Naam"
+        android:inputType="textPersonName"
+        android:text="Naam"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_Spinner_selectRol"
+        app:layout_constraintEnd_toStartOf="@+id/frgHome_txt_persoonPass"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_txt_Van" />
+
+    <Spinner
+        android:id="@+id/frgHome_Spinner_selectRol"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/rolPersonen"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_btn_addPersoon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_txt_persoonName" />
+
+    <Button
+        android:id="@+id/frgHome_btn_addPeriode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="Voeg Periode toe"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_rv_personen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_btn_addPersoon"
+        app:layout_constraintVertical_bias="0.423" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

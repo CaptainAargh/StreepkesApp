@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8BC34A">
+
+    <Spinner
+        android:id="@+id/login_spinner.periode"
+        android:layout_width="348dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_txt_login"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/login.txt.name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="289dp"
+        android:layout_height="212dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_spinner.periode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/herobg" />
+
+    <EditText
+        android:id="@+id/login.txt.name"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_txt_login"
+        android:ems="10"
+        android:hint="     Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/login.txt.pass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_spinner.periode" />
+
+    <EditText
+        android:id="@+id/login.txt.pass"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_txt_login"
+        android:ems="10"
+        android:hint="     Password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/cbSave"
+        app:layout_constraintEnd_toEndOf="@+id/login.txt.name"
+        app:layout_constraintStart_toStartOf="@+id/login.txt.name"
+        app:layout_constraintTop_toBottomOf="@+id/login.txt.name" />
+
+    <Button
+        android:id="@+id/login.btn.login"
+        android:layout_width="175dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="124dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_button_login"
+        android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbSave" />
+
+    <CheckBox
+        android:id="@+id/cbSave"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="16dp"
+        android:text="Bewaar inlog gegevens"
+        app:layout_constraintBottom_toTopOf="@+id/login.btn.login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login.txt.pass" />
+</androidx.constraintlayout.widget.ConstraintLayout>

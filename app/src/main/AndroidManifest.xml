@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="be.kdg.scoutsappadmin">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".StreepkeActivity"
+            android:label="@string/title_activity_streepke"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".OverzichtActivity"
+            android:theme="@style/AppTheme.SlideActivityTheme" />
+        <activity android:name=".StreepkeMainActivity" />
+        <activity android:name=".ui.home_admin.HomeAddRowActivity" />
+        <activity
+            android:name=".ui.addPeriodeActivity"
+            android:label="@string/title_activity_add_periode"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

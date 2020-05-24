@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dag.DagFragment">
+
+    <Spinner
+        android:id="@+id/frgDag_Spinner_Dag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="31dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgDag_Spinner_Persoon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_lb_selectDag" />
+
+    <TextView
+        android:id="@+id/frgDag_lb_selectDag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginBottom="11dp"
+        android:text="Selecteer een Dag"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgDag_Spinner_Dag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgHome_lb_tot" />
+
+    <TextView
+        android:id="@+id/frgHome_lb_tot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="tot"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/frgDag_txt_Tot"
+        app:layout_constraintStart_toEndOf="@+id/frgDag_txt_Van"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_Spinner_Periode" />
+
+    <TextView
+        android:id="@+id/frgDag_txt_Tot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="31 / 07 / 2020"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/frgHome_lb_tot"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_Spinner_Periode" />
+
+    <TextView
+        android:id="@+id/frgLog_lb_Periode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="81dp"
+        android:layout_marginBottom="8dp"
+        android:text="Selecteer een periode"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/frgDag_Spinner_Periode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/frgDag_Spinner_Periode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgHome_lb_tot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgLog_lb_Periode" />
+
+    <TextView
+        android:id="@+id/frgHome_lb_van"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="van"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/frgHome_txt_Van"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_Spinner_Periode" />
+
+    <TextView
+        android:id="@+id/frgDag_txt_Van"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="16 / 07 /2020"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/frgHome_lb_tot"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toEndOf="@+id/frgHome_lb_van"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_Spinner_Periode" />
+
+    <Spinner
+        android:id="@+id/frgDag_Spinner_Persoon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgDag_rv_dagen"
+        app:layout_constraintEnd_toStartOf="@+id/frgDag_btn_addPerson"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_lb_selectDag" />
+
+    <Button
+        android:id="@+id/frgDag_btn_addPerson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
+        android:text="Voeg persoon toe aan dag"
+        app:layout_constraintBottom_toTopOf="@+id/frgDag_rv_dagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgDag_Spinner_Persoon"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_Spinner_Dag" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frgDag_rv_dagen"
+        android:layout_width="424dp"
+        android:layout_height="398dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgDag_btn_addPerson" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

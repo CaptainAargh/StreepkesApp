@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background_material_light"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="be.kdg.scoutsappadmin.OverzichtActivity">
+
+    <Spinner
+        android:id="@+id/frgOverzicht_spinner_Naam"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
+        app:layout_constraintEnd_toStartOf="@+id/frgOverzicht_spinner_GegevenDoor"
+        app:layout_constraintStart_toEndOf="@+id/frgOverzicht_spinner_Dag"
+        app:layout_constraintTop_toBottomOf="@+id/frgLog_lb_naam2" />
+
+    <Spinner
+        android:id="@+id/frgOverzicht_spinner_GegevenDoor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgOverzicht_spinner_Naam"
+        app:layout_constraintTop_toBottomOf="@+id/frgLog_lb_gegevenDoor2" />
+
+    <TextView
+        android:id="@+id/frgLog_lb_naam2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Naam"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_spinner_Naam"
+        app:layout_constraintEnd_toStartOf="@+id/frgLog_lb_gegevenDoor2"
+        app:layout_constraintStart_toEndOf="@+id/frgLog_lb_dag2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/frgOverzicht_spinner_Dag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
+        app:layout_constraintEnd_toStartOf="@+id/frgOverzicht_spinner_Naam"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgLog_lb_dag2" />
+
+    <TextView
+        android:id="@+id/frgLog_lb_dag2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Dag"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_spinner_Dag"
+        app:layout_constraintEnd_toStartOf="@+id/frgLog_lb_naam2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/frgLog_lb_gegevenDoor2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:text="Gegeven door"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_spinner_GegevenDoor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frgLog_lb_naam2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frgOverzicht_rv_Streepkes"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="413dp"
+        android:layout_height="628dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frgOverzicht_spinner_Naam" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
