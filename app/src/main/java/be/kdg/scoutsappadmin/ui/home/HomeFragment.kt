@@ -11,12 +11,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.LoginActivity
 import be.kdg.scoutsappadmin.R
 import be.kdg.scoutsappadmin.StreepkeActivity
+import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon
+import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon_Consumpties
+import be.kdg.scoutsappadmin.fireBaseModels.periodeItem
 import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
@@ -24,7 +32,13 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.nav_header_streepke.*
+import kotlinx.android.synthetic.main.persoon_row.view.*
+import org.w3c.dom.Text
 
 
 class HomeFragment : Fragment() {
@@ -55,39 +69,62 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        var bool = false
 
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
-
-        val chipGroep = root.findViewById<ChipGroup>(R.id.frgStreepke_chipsGroup)
         val addStreepke = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
 
         periode.periodeDagen!!.forEach { dag ->
             periodeDagenNaam.add(dag.dagDatum!!.substring(0, 10))
         }
+        val personenAdapter = GroupAdapter<ViewHolder>()
 
+
+
+
+
+        val firebasePersonen: MutableList<persoonItem> = ArrayList<persoonItem>()
+
+        for (i in 0 until periode.periodePersonen!!.size) {
+            firebasePersonen.add(persoonItem(periode.periodePersonen!![i]))
+        }
+
+        firebasePersonen.sortBy {
+            fp -> fp.persoon.persoonNaam
+        }
+        personenAdapter.addAll(firebasePersonen)
+        var recyclerView = root.findViewById<RecyclerView>(R.id.fragment_home_rvPersonenMain);
+        var ivButton = root.findViewById<ImageView>(R.id.fragment_home_ivStreepke);
+
+        recyclerView.setLayoutManager(LinearLayoutManager(activity!!.applicationContext));
+        recyclerView.adapter = personenAdapter
 
         val geselecteerdePersonen: MutableList<Persoon> = ArrayList<Persoon>()
 
+        val geselecteerdeViews: MutableList<TextView> = ArrayList<TextView>()
+        val geselecteerdeImages: MutableList<ImageView> = ArrayList<ImageView>()
 
-        for (i in 0 until periode.periodePersonen!!.size) {
-            val chip = Chip(root.context,null, R.attr.CustomChipChoice)
-            chip.isCheckable = true
-            chip.isClickable = true
-            chip.setOnCheckedChangeListener { addStreepke, isChecked ->
-                if (isChecked) {
-                    geselecteerdePersonen.add(periode.periodePersonen!![i])
-                    chip.setBackgroundColor(Color.GREEN)
-                } else {
-                    geselecteerdePersonen.remove(periode.periodePersonen!![i])
-                }
+        personenAdapter.setOnItemClickListener { item, view ->
+         //   view.persoon_row_naam.setBackgroundColor(Color.parseColor("#ff99cc00"))
+            view.persoon_row_iv.bringToFront()
+            view.persoon_row_iv.visibility = if (view.persoon_row_iv.visibility == View.VISIBLE){
+                View.INVISIBLE
+            } else{
+                View.VISIBLE
+            }
+            if (view.persoon_row_iv.visibility == View.VISIBLE){
+                view.persoon_row_naam.setBackgroundResource(R.drawable.bakgroundbeer)
+                val persoonItem = item as persoonItem
+                geselecteerdePersonen.add(persoonItem.persoon)
+                var z = view.persoon_row_naam
+            } else {
+                view.persoon_row_naam.setBackgroundResource(R.drawable.rounded_txt_naam)
+                val persoonItem = item as persoonItem
+                geselecteerdePersonen.remove(persoonItem.persoon)
+
 
             }
-            chip.setText(periode.periodePersonen!![i].persoonNaam)
-            chipGroep.addView(chip)
         }
-
-        addStreepke.setOnClickListener {
+        ivButton.setOnClickListener {
             var personenString: String =
                 "Bevestig dat ge een streke wilt zetten voor volgende person: \n"
 
@@ -112,27 +149,43 @@ class HomeFragment : Fragment() {
                 alertDialog.setTitle("Strepke dabei")
                 Log.d("personenString", "String personen " + personenString)
                 alertDialog.setMessage(personenString)
-                alertDialog.setPositiveButton("OK", object : DialogInterface.OnClickListener {
+                alertDialog.setNegativeButton("OK", object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        for (i in 0 until chipGroep.getChildCount()) {
-                            val chip = chipGroep.getChildAt(i) as Chip
-                            if (chip.isChecked) {
-                                chip.isChecked = false
-                            }
-                        }
                         val c = Consumptie(
                             refPeriode_Personen_StreepkesKey, persoon.persoonNaam, persoon.key,
                             System.currentTimeMillis()
                         )
+                        geselecteerdeViews.forEach {
+                            v  -> v.setBackgroundResource(R.drawable.rounded_txt_naam)
+                        }
+                        geselecteerdeImages.forEach {
+                            i -> i.visibility = View.INVISIBLE
+                        }
                         refPeriode_Personen_Streepkes.setValue(c)
                         Log.d("addPeriodePersoon", "Jeej succes" + c.toString())
+                        getFragmentManager()!!.beginTransaction().detach(root.findFragment()).attach(root.findFragment()).commit();
+
                     }
+
                 })
                 alertDialog.show()
             }
         }
         return root
     }
-
 }
 
+
+class persoonItem (
+    val persoon:Persoon) : Item<ViewHolder>() {
+
+    override fun getLayout(): Int {
+        return R.layout.persoon_row    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.persoon_row_naam.text = "\n      " + "   " + persoon.persoonNaam
+
+
+    }
+
+}

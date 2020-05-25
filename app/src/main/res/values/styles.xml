@@ -6,9 +6,9 @@
 
         <!-- Customize your theme here. -->
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryDark">@color/reactiefBlack</item>
+        <item name="colorAccent">@color/reactiefGreyDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

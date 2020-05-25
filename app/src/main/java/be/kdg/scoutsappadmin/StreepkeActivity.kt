@@ -66,6 +66,7 @@ class StreepkeActivity : AppCompatActivity() {
         val header: View = navigationView.getHeaderView(0)
         val teext: TextView = header.findViewById(R.id.nav_header_txtNaam)
 
+        navView.setBackgroundColor(getResources().getColor(R.color.reactiegGreyLight));
 
     }
 

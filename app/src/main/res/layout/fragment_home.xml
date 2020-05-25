@@ -6,41 +6,27 @@
     android:layout_height="match_parent"
     tools:context="be.kdg.scoutsappadmin.ui.home.HomeFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_home_rvPersonenMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/reactiefGreyDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/frgStreepke_chipsGroup"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            app:chipSpacingVertical="10dp"
-            app:chipSpacingHorizontal="60dp"
-            app:chipSpacing="60dp"
-
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/frgStreepke_btn_addStreepjes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-        </com.google.android.material.chip.ChipGroup>
-
-        <Button
-            android:id="@+id/frgStreepke_btn_addStreepjes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
-            android:text="Voeg streepkes toe"
-
+        <ImageView
+            android:id="@+id/fragment_home_ivStreepke"
+            android:layout_width="86dp"
+            android:layout_height="80dp"
+            android:src="@drawable/streepke"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.888"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frgStreepke_chipsGroup" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.958" />
 </androidx.constraintlayout.widget.ConstraintLayout>

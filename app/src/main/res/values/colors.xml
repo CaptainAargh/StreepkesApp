@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="green" >#4CAF50</color>
+
+
+
+
+    <color name="reactiefGreenDark">#61892F</color>
+    <color name="reactiefGreenLight">#86C232</color>
+    <color name="reactiefBlack">#222629</color>
+    <color name="reactiefGreyDark">#474B4F</color>
+    <color name="reactiegGreyLight">#6B6E70</color>
 </resources>

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -224,46 +225,70 @@ class OverzichtFragment : Fragment() {
                     list.forEach { e ->
                         Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
                     }
+
+                    fun getgesorteerd(tijdfiler:Long) {
+
+                        var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
+                        for (i in 0 until periode.periodePersonen!!.size) {
+
+                            var consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
+                            var persoonLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
+                            periode.periodePersonen!![i].persoonConsumpties!!.forEach { pc ->
+                                if (pc.timeStamp > tijdfiler) {
+                                    consumptieLijst.add(pc)
+                                }
+                            }
+                            Log.d("size", periode.periodePersonen!![i].toString())
+                            gesorteerd.add(
+                                consumptieItem(
+                                    periode.periodePersonen!![i].persoonNaam!!,
+
+                                    periode.periodePersonen!![i].persoonConsumpties!!.size
+                                )
+                            )
+
+                            gesorteerd.sortBy { ci ->
+                                ci.aantal
+                            }
+                            gesorteerd.forEach { e ->
+                                periodeFilterTijd.add(e)
+                            }
+                            rvAdapter.clear()
+                            rvAdapter.addAll(gesorteerd.reversed())
+                            rvStreepkes.adapter = rvAdapter
+                            list.add(periode)
+                            Log.d("getOverzicht", "periode " + periode)
+                            list.forEach { e ->
+                                Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
+                            }
+                        }
+                    }
+
+
                     if (filter.equals("maand")) {
+
+
                         Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                    } else if (filter.equals("week")){
+                    } else if (filter.equals("week")) {
+
+
                         Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
                     } else if (filter.equals("vandaag")) {
-                            Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                    } else {
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(activity!!.applicationContext, "filter vandaag geselecteerd", duration)
+                        toast.show()
+                        getgesorteerd(1590357600000)
+
                         Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                    } else {
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(activity!!.applicationContext, "filter alles geselecteerd", duration)
+                        toast.show()
+                        getgesorteerd(0)
+
                     }
 
-                    var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
-                    for (i in 0 until periode.periodePersonen!!.size) {
-                        var consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
-                        var persoonLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
-                        periode.periodePersonen!![i].persoonConsumpties!!.forEach { pc ->
-                            consumptieLijst.add(pc)
-                        }
-                        Log.d("size", periode.periodePersonen!![i].toString())
-                        gesorteerd.add(
-                            consumptieItem(
-                                periode.periodePersonen!![i].persoonNaam!!,
-
-                                periode.periodePersonen!![i].persoonConsumpties!!.size
-                            )
-                        )
-                        gesorteerd.sortBy { ci ->
-                            ci.aantal
-                        }
-                        gesorteerd.forEach { e ->
-                            periodeFilterTijd.add(e)
-                        }
-
-                        rvAdapter.addAll(gesorteerd.reversed())
-                        rvStreepkes.adapter = rvAdapter
-                        list.add(periode)
-                        Log.d("getOverzicht", "periode " + periode)
-                        list.forEach { e ->
-                            Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
-                        }
-                    }
                 }
 
 
