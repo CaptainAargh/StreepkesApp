@@ -21,10 +21,10 @@ import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Dag
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -40,6 +40,15 @@ class OverzichtFragment : Fragment() {
     private lateinit var rvStreepkes: RecyclerView
 
     @SuppressLint("UseRequireInsteadOfGet")
+    override fun onResume() {
+        val periode2 = activity!!.intent.getParcelableExtra<Periode>(LoginActivity.PERIODE)
+        fetchAllStreepkes(periode2.key, "totaal")
+        super.onResume()
+
+
+    }
+
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,20 +58,23 @@ class OverzichtFragment : Fragment() {
             ViewModelProviders.of(this).get(OverzichtViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_overzicht, container, false)
         val periode = activity!!.intent.getParcelableExtra<Periode>(LoginActivity.PERIODE)
+        val persoon = activity!!.intent!!.getParcelableExtra<Persoon>("gebruiker")
+
         Log.d("overzicht", periode.toString())
 
-        spinnerGegevenDoor = root.findViewById(R.id.frgOverzicht_spinner_GegevenDoor)
-        spinnerDag = root.findViewById(R.id.frgOverzicht_spinner_Dag)
-        spinnerNaam = root.findViewById(R.id.frgOverzicht_spinner_Naam)
-
+        val spinnerSorteer = root.findViewById<Spinner>(R.id.frgOverzicht_spinner)
         rvStreepkes = root.findViewById(R.id.frgOverzicht_rv_Streepkes)
 
-        val rvAdapter = GroupAdapter<ViewHolder>()
-        rvStreepkes.adapter = rvAdapter
-        fetchAllPeriodes()
+
+        fetchAllStreepkes(periode.key, "totaal")
+
+        val labelsFilter =
+            listOf<String>("Totaal aantal streepjes", "Vandaag", "Deze Week", "Deze maand")
+
+        var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
         for (i in 0 until periode.periodePersonen!!.size) {
             Log.d("size", periode.periodePersonen!![i].toString())
-            rvAdapter.add(
+            gesorteerd.add(
                 consumptieItem(
                     periode.periodePersonen!![i].persoonNaam!!,
 
@@ -70,27 +82,66 @@ class OverzichtFragment : Fragment() {
                 )
             )
         }
+        gesorteerd.sortBy { ci ->
+            ci.aantal
+        }
 
 
+        val spinnerArrayAdapter = ArrayAdapter<String>(
+            this@OverzichtFragment.context!!,
+            R.layout.support_simple_spinner_dropdown_item,
+            labelsFilter
+        )
+        spinnerSorteer.adapter = spinnerArrayAdapter
+        spinnerSorteer.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (spinnerSorteer.selectedItem.toString().equals("Vandaag")) {
+                        fetchAllStreepkes(periode.key, "vandaag")
+
+                    } else if (spinnerSorteer.selectedItem.toString().equals("Deze Week")) {
+                        fetchAllStreepkes(periode.key, "week")
+
+                    } else if (spinnerSorteer.selectedItem.toString().equals("Deze maand")) {
+                        fetchAllStreepkes(periode.key, "maand")
+
+                    } else {
+                        fetchAllStreepkes(periode.key, "totaal")
+                    }
 
 
+                }
+            }
         return root
     }
 
-    private fun fetchAllPeriodes() {
-        val ref = FirebaseDatabase.getInstance().getReference("/periodes")
+    private fun fetchAllStreepkes(key: String, filter: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("/periodes/${key}")
         val list: MutableList<Periode?> = ArrayList<Periode?>()
         val namenList: MutableList<String> = ArrayList<String>()
+        val rvAdapter = GroupAdapter<ViewHolder>()
 
 
-        ref.addChildEventListener(object : ChildEventListener {
-
+        ref.addValueEventListener(object : ValueEventListener {
             @SuppressLint("UseRequireInsteadOfGet")
-            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
                 val periodeFb = p0.getValue(FireBasePeriode::class.java)
                 val dagenList = periodeFb!!.periodeDagen.values.toList()
                 val personenList = periodeFb.periodePersonen.values.toList()
-                val periodeFbNaam = p0.getValue(FireBasePeriode::class.java)!!.periodeNaam
+                val periodeFilterTijd = ArrayList<consumptieItem>()
 
                 var periodeDagenList = ArrayList<Dag>()
                 var periodePersonenList = ArrayList<Persoon>()
@@ -155,10 +206,10 @@ class OverzichtFragment : Fragment() {
                         , consumptiesSwitched
                         , personenList[i].persoonRol
                     )
-                    Log.d("getOverzicht","persoon " + p)
+                    Log.d("getOverzicht", "persoon " + p)
                     periodePersonenList.add(
-                       p
-                        )
+                        p
+                    )
                 }
 
                 if (periodeFb != null) {
@@ -168,35 +219,63 @@ class OverzichtFragment : Fragment() {
                         periodeDagenList,
                         periodePersonenList
                     )
-                    Log.d("getOverzicht","periode " + periode)
+                    list.add(periode)
+                    Log.d("getOverzicht", "periode " + periode)
+                    list.forEach { e ->
+                        Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
+                    }
+                    if (filter.equals("maand")) {
+                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                    } else if (filter.equals("week")){
+                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                    } else if (filter.equals("vandaag")) {
+                            Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                    } else {
+                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
+                    }
 
+                    var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
+                    for (i in 0 until periode.periodePersonen!!.size) {
+                        var consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
+                        var persoonLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
+                        periode.periodePersonen!![i].persoonConsumpties!!.forEach { pc ->
+                            consumptieLijst.add(pc)
+                        }
+                        Log.d("size", periode.periodePersonen!![i].toString())
+                        gesorteerd.add(
+                            consumptieItem(
+                                periode.periodePersonen!![i].persoonNaam!!,
+
+                                periode.periodePersonen!![i].persoonConsumpties!!.size
+                            )
+                        )
+                        gesorteerd.sortBy { ci ->
+                            ci.aantal
+                        }
+                        gesorteerd.forEach { e ->
+                            periodeFilterTijd.add(e)
+                        }
+
+                        rvAdapter.addAll(gesorteerd.reversed())
+                        rvStreepkes.adapter = rvAdapter
+                        list.add(periode)
+                        Log.d("getOverzicht", "periode " + periode)
+                        list.forEach { e ->
+                            Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
+                        }
+                    }
                 }
 
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
 
             }
-
-            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-
-            }
-
-            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
-
-            }
-
-            override fun onChildRemoved(p0: DataSnapshot) {
-
-            }
-
         })
-
 
     }
 }
 
-class consumptieItem(val naam: String, val aantal: Int) : Item<ViewHolder>() {
+class consumptieItem(
+    val naam: String, val aantal: Int
+) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.streepke_row
     }

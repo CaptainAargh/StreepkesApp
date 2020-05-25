@@ -3,7 +3,6 @@ package be.kdg.scoutsappadmin
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,19 +10,14 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon_Consumpties
-import be.kdg.scoutsappadmin.fireBaseModels.periodeItem
 import be.kdg.scoutsappadmin.model.*
-import be.kdg.scoutsappadmin.ui.main.PlaceholderFragment
-
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.periode_row.view.*
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 
 
 class LoginActivity : AppCompatActivity() {
@@ -57,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-
         btnLogin.setOnClickListener {
             if (cbLogin.isChecked) {
 
@@ -79,14 +72,21 @@ class LoginActivity : AppCompatActivity() {
             @SuppressLint("UseRequireInsteadOfGet")
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val periodeFbNaam = p0.getValue(FireBasePeriode::class.java)
+                val consumpties = ArrayList<FireBasePeriode_Persoon_Consumpties>()
+                periodeFbNaam!!.periodePersonen.toList().forEach { e ->
+                    e.second.persoonConsumpties.toList().forEach { pc ->
+                        consumpties.add(pc.second)
+                        Log.d("consumptes", pc.second.consumptieGegevenDoor)
+
+                    }
+                }
+
+                Log.d("consumptes", consumpties.toString())
+                consumpties.forEach { c -> Log.d("consumptes", "c" + c.toString()) }
 
                 if (periodeFbNaam!!.periodeNaam.equals(spinnerPeriode.selectedItem.toString())) {
                     val dagenList = periodeFbNaam.periodeDagen.values.toList()
                     val personenList = periodeFbNaam.periodePersonen.values.toList()
-                    val consumpties = personenList[1].persoonConsumpties
-
-                    Log.d("consumptes", consumpties.toString())
-                    consumpties.forEach { c -> Log.d("consumptes", c.toString()) }
 
                     var periodeDagenList = ArrayList<Dag>()
                     var periodePersonenList = ArrayList<Persoon>()
@@ -189,10 +189,11 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("ResourceType", "CommitPrefEdits")
     private fun checkLogin(p: Periode) {
-
         val naamLogin = txtNaam.text.toString()
         val naamPass = txtPass.text.toString()
+
         if (naamLogin.equals("admin") && naamPass.equals("admin")) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -210,8 +211,6 @@ class LoginActivity : AppCompatActivity() {
                     intent.putExtra(PERIODE, p)
                     intent.putExtra(GEBRUIKER, p.periodePersonen!![i])
                     startActivity(intent)
-                    //    findViewById<TextView>(R.id.navLogin_PersoonNaam).text =  p.periodePersonen!![i].persoonNaam
-                    //  findViewById<TextView>(R.id.navLogin_PersoonRol).text = p.periodePersonen!![i].persoonRol.toString()
                 }
             }
         }

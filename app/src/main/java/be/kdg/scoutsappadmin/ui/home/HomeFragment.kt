@@ -1,94 +1,84 @@
 package be.kdg.scoutsappadmin.ui.home
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.Spinner
-import androidx.annotation.RequiresApi
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import be.kdg.scoutsappadmin.LoginActivity
 import be.kdg.scoutsappadmin.R
+import be.kdg.scoutsappadmin.StreepkeActivity
 import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.frgStreepke_btn_addStreepjes
+import kotlinx.android.synthetic.main.nav_header_streepke.*
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    @SuppressLint("UseRequireInsteadOfGet")
+    @SuppressLint("UseRequireInsteadOfGet", "ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-             homeViewModel =
+        homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val periode = activity!!.intent!!.getParcelableExtra<Periode>("periode")
         val persoon = activity!!.intent!!.getParcelableExtra<Persoon>("gebruiker")
 
-        Log.d("please", periode.toString())
-        Log.d("please", persoon.toString())
+        val navigationView: NavigationView = activity!!.findViewById(R.id.nav_view_Streepke)
+        val header: View = navigationView.getHeaderView(0)
+        val naam: TextView = header.findViewById(R.id.nav_header_txtNaam)
+        val rol: TextView = header.findViewById(R.id.nav_header_txtRol)
+        naam.text = persoon.persoonNaam
+        rol.text = persoon.persoonRol.toString()
+        val btnLogout: Button = header.findViewById(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            val intent = Intent(root.context, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        var bool = false
 
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
 
-        val spinner =  root.findViewById<Spinner>(R.id.frgStreepke_spinner_selectDag)
-        val chipGroep =  root.findViewById<ChipGroup>(R.id.frgStreepke_chipsGroup)
-        val addStreepke =  root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
+        val chipGroep = root.findViewById<ChipGroup>(R.id.frgStreepke_chipsGroup)
+        val addStreepke = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
 
-        periode.periodeDagen!!.forEach {
-                dag -> periodeDagenNaam.add(dag.dagDatum!!.substring(0,10))
+        periode.periodeDagen!!.forEach { dag ->
+            periodeDagenNaam.add(dag.dagDatum!!.substring(0, 10))
         }
-        val spinnerArrayAdapter = ArrayAdapter<String>(
-            root.context,
-            R.layout.support_simple_spinner_dropdown_item,
-            periodeDagenNaam
-        )
-        spinner.adapter = spinnerArrayAdapter
-        spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
 
-                @RequiresApi(Build.VERSION_CODES.O)
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
 
-                }
-            }
-
-        val geselecteerdePersonen : MutableList<Persoon> = ArrayList<Persoon>()
+        val geselecteerdePersonen: MutableList<Persoon> = ArrayList<Persoon>()
 
 
         for (i in 0 until periode.periodePersonen!!.size) {
-            val chip  = Chip(root.context)
+            val chip = Chip(root.context,null, R.attr.CustomChipChoice)
             chip.isCheckable = true
             chip.isClickable = true
-            chip.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
+            chip.setOnCheckedChangeListener { addStreepke, isChecked ->
+                if (isChecked) {
                     geselecteerdePersonen.add(periode.periodePersonen!![i])
                     chip.setBackgroundColor(Color.GREEN)
-                }else{
+                } else {
                     geselecteerdePersonen.remove(periode.periodePersonen!![i])
                 }
 
@@ -97,11 +87,17 @@ class HomeFragment : Fragment() {
             chipGroep.addView(chip)
         }
 
-
         addStreepke.setOnClickListener {
-            for (i in 0 until geselecteerdePersonen.size ) {
+            var personenString: String =
+                "Bevestig dat ge een streke wilt zetten voor volgende person: \n"
+
+            for (i in 0 until geselecteerdePersonen.size) {
+                personenString += "\n " + geselecteerdePersonen[i].persoonNaam
+            }
+            for (i in 0 until geselecteerdePersonen.size) {
                 val refPeriode_Personen_Streepkes =
-                    FirebaseDatabase.getInstance().reference.child("periodes/${periode.key}/periodePersonen/${geselecteerdePersonen[i].key}/streepkes").push()
+                    FirebaseDatabase.getInstance().reference.child("periodes/${periode.key}/periodePersonen/${geselecteerdePersonen[i].key}/persoonConsumpties")
+                        .push()
 
                 val refPeriode_Personen_StreepkesKey =
                     refPeriode_Personen_Streepkes.key
@@ -110,18 +106,32 @@ class HomeFragment : Fragment() {
                     Log.d("periodes", "keys push niet aangekregen van periodes")
                     return@setOnClickListener
                 }
-                Log.d("overzichterror", persoon.toString())
 
-                val c = Consumptie(refPeriode_Personen_StreepkesKey,persoon.persoonNaam,persoon.key,
-                    System.currentTimeMillis())
-
-
-                refPeriode_Personen_Streepkes.setValue(c)
-                Log.d("addPeriodePersoon", "Jeej succes" + c.toString())
+                val alertDialog =
+                    AlertDialog.Builder(root.context)
+                alertDialog.setTitle("Strepke dabei")
+                Log.d("personenString", "String personen " + personenString)
+                alertDialog.setMessage(personenString)
+                alertDialog.setPositiveButton("OK", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        for (i in 0 until chipGroep.getChildCount()) {
+                            val chip = chipGroep.getChildAt(i) as Chip
+                            if (chip.isChecked) {
+                                chip.isChecked = false
+                            }
+                        }
+                        val c = Consumptie(
+                            refPeriode_Personen_StreepkesKey, persoon.persoonNaam, persoon.key,
+                            System.currentTimeMillis()
+                        )
+                        refPeriode_Personen_Streepkes.setValue(c)
+                        Log.d("addPeriodePersoon", "Jeej succes" + c.toString())
+                    }
+                })
+                alertDialog.show()
             }
-
         }
-        return  root
+        return root
     }
 
 }

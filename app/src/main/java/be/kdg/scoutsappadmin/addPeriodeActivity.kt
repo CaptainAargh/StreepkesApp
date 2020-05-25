@@ -117,7 +117,7 @@ class addPeriodeActivity : AppCompatActivity() {
             FirebaseDatabase.getInstance().reference.child("periodes/$key/periodeDagen/$keyDagen/dagPersonen")
                 .push().key
         val keyDagenPersonenConsumpties =
-            FirebaseDatabase.getInstance().reference.child("periodes/$key/periodeDagen/$keyDagen/dagPersonen/$keyDagenPersonen/persoonConsumptie")
+            FirebaseDatabase.getInstance().reference.child("periodes/$key/periodeDagen/$keyDagen/dagPersonen/$keyDagenPersonen/persoonConsumpties")
                 .push().key
 
         if (key == null) {

@@ -13,18 +13,20 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textSize="24dp"
         app:layout_constraintEnd_toStartOf="@+id/streepke_row_txtAantal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/streepke_row_txtAantal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="31dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:text="TextView"
+        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/streepke_row_txtNaam"
         app:layout_constraintTop_toTopOf="parent" />
