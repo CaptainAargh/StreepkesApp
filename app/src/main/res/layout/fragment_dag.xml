@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/frgDag_lb_selectDag"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
@@ -36,11 +36,10 @@
 
     <TextView
         android:id="@+id/frgHome_lb_tot"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="34dp"
+        android:layout_height="21dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="tot"
         android:textSize="18sp"
@@ -51,9 +50,8 @@
 
     <TextView
         android:id="@+id/frgDag_txt_Tot"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
@@ -96,8 +94,8 @@
 
     <TextView
         android:id="@+id/frgHome_lb_van"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="47dp"
+        android:layout_height="19dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -111,8 +109,8 @@
 
     <TextView
         android:id="@+id/frgDag_txt_Van"
-        android:layout_width="74dp"
-        android:layout_height="23dp"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -127,11 +125,11 @@
 
     <Spinner
         android:id="@+id/frgDag_Spinner_Persoon"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="76dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/frgDag_rv_dagen"
         app:layout_constraintEnd_toStartOf="@+id/frgDag_btn_addPerson"
@@ -140,7 +138,7 @@
 
     <Button
         android:id="@+id/frgDag_btn_addPerson"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="20dp"

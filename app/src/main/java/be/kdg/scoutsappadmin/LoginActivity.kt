@@ -37,6 +37,8 @@ class LoginActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val sharedPreferences = getSharedPreferences("LOGIN_INFO",Context.MODE_PRIVATE)
+
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -50,6 +52,13 @@ class LoginActivity : AppCompatActivity() {
         fetchAllPeriodes()
 
 
+        cbLogin.setOnCheckedChangeListener{ compoundButton: CompoundButton, b: Boolean ->
+            if (cbLogin.isChecked) {
+
+            } else {
+
+            }
+        }
 
         btnLogin.setOnClickListener {
             if (cbLogin.isChecked) {

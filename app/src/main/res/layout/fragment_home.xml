@@ -11,12 +11,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/reactiefGreyDark"
+        android:scrollbarDefaultDelayBeforeFade="400"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:focusableInTouchMode="true"
+        android:scrollbars="none"
+        />
 
         <ImageView
             android:id="@+id/fragment_home_ivStreepke"
@@ -29,4 +33,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.958" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

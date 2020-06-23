@@ -1,17 +1,34 @@
 package be.kdg.scoutsappadmin.ui.log
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.R
+import be.kdg.scoutsappadmin.fireBaseModels.*
+import be.kdg.scoutsappadmin.model.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.fragment_dag.*
+import kotlinx.android.synthetic.main.row_streepjes_log.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class LogFragment : Fragment() {
 
@@ -29,29 +46,24 @@ class LogFragment : Fragment() {
     private lateinit var txtAantalStreepjes: TextView
 
     private lateinit var rvLog: RecyclerView
-
-
-
-
-
+    val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         logViewModel =
-                ViewModelProviders.of(this).get(LogViewModel::class.java)
+            ViewModelProviders.of(this).get(LogViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_log, container, false)
 
 
         // val textView: TextView = root.findViewById(R.id.text_slideshow)
         logViewModel.text.observe(viewLifecycleOwner, Observer {
-         //   textView.text = it
+            //   textView.text = it
         })
 
         btnAddConsumptie = root.findViewById(R.id.frgLog_btn_addConsumatie)
-        btndeleteConsumptie = root.findViewById(R.id.frgLog_btn_deleteConsumatie)
 
         spinnerNaamStreepjes = root.findViewById(R.id.frgLog_Spinner_naamStreepjes)
         spinnerGegevenDoor = root.findViewById(R.id.frgLog_Spinner_gegevenDoor)
@@ -62,8 +74,343 @@ class LogFragment : Fragment() {
         txtAantalStreepjes = root.findViewById(R.id.frgLog_txt_aantalStreepjes)
 
         rvLog = root.findViewById(R.id.frgOverzicht_rv_Streepkes)
+        rvLog.layoutManager = LinearLayoutManager(this.context)
+
+        fetchAllStreepkes()
+
+        rvLog.adapter = adapter
+
 
         return root
 
     }
+
+    private fun fetchAllStreepkes() {
+        val ref = FirebaseDatabase.getInstance().getReference("/periodes")
+        val periodeList: MutableList<Periode> = ArrayList<Periode>()
+        val namenList: MutableList<String> = ArrayList<String>()
+        var dagenDateList: List<Date> = ArrayList<Date>()
+        var dagenDateListStrings: MutableList<String> = ArrayList<String>()
+        val list: MutableList<Periode?> = ArrayList<Periode?>()
+        dagenDateListStrings.clear()
+
+
+        var dagenSortedStringList: MutableList<String> = ArrayList<String>()
+
+        ref.addChildEventListener(object : ChildEventListener {
+            @SuppressLint("UseRequireInsteadOfGet")
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                val dagenList = periodeFb!!.periodeDagen.values.toList()
+                val personenList = periodeFb.periodePersonen.values.toList()
+
+                var periodeDagenList = ArrayList<Dag>()
+                var periodePersonenList = ArrayList<Persoon>()
+
+                for (i in 0 until dagenList.size) {
+                    var periode_dag_personen_lijst: MutableList<Persoon> = ArrayList<Persoon>()
+                    for (j in 0 until dagenList[i].dagPersonen.size) {
+                        var tussenLijst = dagenList[i].dagPersonen.values.toList()
+                        var periode_dag_personen_consumpties_lijst: MutableList<Consumptie> =
+                            ArrayList<Consumptie>()
+                        for (x in 0 until tussenLijst[j].persoonConsumpties.size) {
+                            var tussenLijstConsumptie =
+                                tussenLijst[j].persoonConsumpties.values.toList()
+                            periode_dag_personen_consumpties_lijst.add(
+                                Consumptie(
+                                    tussenLijstConsumptie[x].key.toString(),
+                                    tussenLijstConsumptie[x].consumptieGegevenDoor
+                                    ,
+                                    tussenLijstConsumptie[x].consumptieGegevenDoorId
+                                    ,
+                                    tussenLijstConsumptie[x].timeStamp
+                                )
+                            )
+                        }
+                        periode_dag_personen_lijst.add(
+                            Persoon(
+                                tussenLijst[j].key,
+                                tussenLijst[j].persoonNaam
+                                , tussenLijst[j].persoonPass
+                                , periode_dag_personen_consumpties_lijst
+                                , tussenLijst[j].persoonRol
+                            )
+                        )
+                    }
+                    periodeDagenList.add(
+                        Dag(
+                            dagenList[i].key,
+                            dagenList[i].dagDatum,
+                            periode_dag_personen_lijst
+
+                        )
+                    )
+                }
+                for (i in 0 until personenList.size) {
+                    val consumpties = personenList[i].persoonConsumpties.values.toList()
+                    var consumptiesSwitched = ArrayList<Consumptie>()
+                    for (y in 0..consumpties.size - 1) {
+                        consumptiesSwitched.add(
+                            Consumptie(
+                                consumpties[y].key,
+                                consumpties[y].consumptieGegevenDoor,
+                                consumpties[y].consumptieGegevenDoorId,
+                                consumpties[y].timeStamp
+                            )
+                        )
+                    }
+                    periodePersonenList.add(
+                        Persoon(
+                            personenList[i].key
+                            , personenList[i].persoonNaam
+                            , personenList[i].persoonPass
+                            , consumptiesSwitched
+                            , personenList[i].persoonRol
+                        )
+                    )
+                }
+                if (periodeFb != null) {
+                    val periode = Periode(
+                        periodeFb.key,
+                        periodeFb.periodeNaam,
+                        periodeDagenList,
+                        periodePersonenList
+                    )
+                    namenList.add(periode.periodeNaam!!)
+                    periodeList.add(periode)
+
+
+
+
+
+                    Log.d("getPeriodes", periode.toString())
+                    Log.d("getPeriodes", periode.periodeDagen.toString())
+
+                }
+                val spinnerArrayAdapter = ArrayAdapter<String>(
+                    this@LogFragment.context!!,
+                    R.layout.support_simple_spinner_dropdown_item,
+                    namenList
+                )
+                var p = Periode()
+                spinnerPeriode.adapter = spinnerArrayAdapter
+                spinnerPeriode.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
+
+                        @RequiresApi(Build.VERSION_CODES.O)
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            for (i in 0..periodeList.size - 1) {
+                                if (periodeList[i].periodeNaam.equals(
+                                        parent!!.getItemAtPosition(
+                                            position
+                                        ).toString()
+                                    )
+                                ) {
+                                    p = periodeList[i]
+                                }
+
+                            }
+                            var periodeDag2 = Periode()
+                            for (i in 0..periodeList.size - 1) {
+                                if (periodeList[i].periodeNaam.equals(
+                                        spinnerPeriode.selectedItem.toString()
+                                    )
+                                ) {
+                                    periodeDag2 = periodeList[i]
+                                    break
+                                }
+                            }
+                            val lijstPersonen = periodeDag2.periodePersonen
+                            val lijstPersonenString = ArrayList<String>()
+                            for (x in 0 until lijstPersonen!!.size) {
+                                lijstPersonenString.add(lijstPersonen[x].persoonNaam!!)
+                            }
+                            val spinnerArrayAdapterGegevenDoor= ArrayAdapter<String>(
+                                this@LogFragment.context!!,
+                                R.layout.support_simple_spinner_dropdown_item,
+                                lijstPersonenString
+                            )
+                            spinnerGegevenDoor.adapter = spinnerArrayAdapterGegevenDoor
+                            spinnerGegevenDoor.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    }
+
+                                    @RequiresApi(Build.VERSION_CODES.O)
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                    }
+                                }
+                            for (x in 0 until lijstPersonen!!.size) {
+                                lijstPersonenString.add(lijstPersonen[x].persoonNaam!!)
+                            }
+                            val spinnerArrayAdapterWijzigStreepjes= ArrayAdapter<String>(
+                                this@LogFragment.context!!,
+                                R.layout.support_simple_spinner_dropdown_item,
+                                lijstPersonenString
+                            )
+                            spinnerNaamStreepjes.adapter = spinnerArrayAdapterWijzigStreepjes
+                            spinnerNaamStreepjes.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    }
+
+                                    @RequiresApi(Build.VERSION_CODES.O)
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                    }
+                                }
+                            val spinnerArrayAdapterPersonen = ArrayAdapter<String>(
+                                this@LogFragment.context!!,
+                                R.layout.support_simple_spinner_dropdown_item,
+                                lijstPersonenString
+                            )
+                            spinnerNaam.adapter = spinnerArrayAdapterPersonen
+                            spinnerNaam.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    }
+
+                                    @RequiresApi(Build.VERSION_CODES.O)
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                    }
+                                }
+                            for (i in 0 until dagenDateListStrings.size) {
+
+                            }
+                            var periodeDag = Periode()
+                            for (i in 0..periodeList.size - 1) {
+                                Log.d(
+                                    "datefucker2",
+                                    "periodeDag To Stirng :" + " : " + periodeList[i].toString()
+                                )
+
+                                if (periodeList[i].periodeNaam.equals(
+                                        spinnerPeriode.selectedItem.toString()
+                                    )
+                                ) {
+                                    periodeDag = periodeList[i]
+                                }
+                            }
+                            Log.d(
+                                "datefucker2",
+                                "periodeDag To Stirng :" + " : " + periodeDag.toString()
+
+                            )
+                            fun sortDates(periode: Periode): List<Date> {
+                                val dates: MutableList<Date> =
+                                    emptyList<Date>().toMutableList()
+                                for (i in 0..periode.periodeDagen!!.size - 1) {
+                                    val sdf3 =
+                                        SimpleDateFormat(
+                                            "EEE MMM dd HH:mm:ss zzz yyyy",
+                                            Locale.ENGLISH
+                                        )
+
+                                    var d1: Date? = null
+                                    try {
+                                        d1 = sdf3.parse(
+                                            periode.periodeDagen!![i].dagDatum
+                                        )
+                                        dates.add(d1)
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    Log.d(
+                                        "datefucker",
+                                        "date geparsed van HomzFragment : " + d1.toString()
+                                    )
+                                }
+                                dates.sort()
+                                return dates
+                            }
+                            val listDates = sortDates(periodeDag)
+                            val dagenLijst = ArrayList<String>()
+                            for (i in 0 until listDates.size) {
+                                dagenLijst.add(listDates[i].toString().substring(0, 10))
+                                Log.d(
+                                    "dagenDateListStrings",
+                                    "Vanuit listDates via sort fun " + " : " + listDates[i].toString()
+                                        .substring(0, 10)
+                                )
+                            }
+                            val spinnerDagArrayAdapter = ArrayAdapter<String>(
+                                this@LogFragment.context!!,
+                                R.layout.support_simple_spinner_dropdown_item,
+                                dagenLijst
+                            )
+                            spinnerDag.adapter = spinnerDagArrayAdapter
+                            spinnerDag.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    }
+
+                                    @RequiresApi(Build.VERSION_CODES.O)
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+                                    }
+                                }
+
+                            if (spinnerPeriode.selectedItem == null) {
+                                frgDag_btn_addPerson.setEnabled(false)
+                            }
+
+                        }
+                    }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+            }
+        })
+
+
+    }
+}
+
+
+class consumptieItem(
+    val naam: String, val aantal: Int
+) : Item<ViewHolder>() {
+    override fun getLayout(): Int {
+        return R.layout.row_streepjes_log
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.row_log_txtNaam.text = naam
+        viewHolder.itemView.row_log_txtDoor.text = aantal.toString()
+    }
+
 }

@@ -282,9 +282,6 @@ class OverzichtFragment : Fragment() {
                         Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
                         Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
                     } else {
-                        val duration = Toast.LENGTH_SHORT
-                        val toast = Toast.makeText(activity!!.applicationContext, "filter alles geselecteerd", duration)
-                        toast.show()
                         getgesorteerd(0)
 
                     }

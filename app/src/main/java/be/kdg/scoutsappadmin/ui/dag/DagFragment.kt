@@ -292,7 +292,7 @@ class DagFragment : Fragment() {
                 for (i in 0..periodeList.size - 1) {
                     Log.d(
                         "datefucker2",
-                        "periodeDag To Stirng :" + " : " + periodeList[i].toString())
+                        "Meendem? :" + " : " + periodeList[i].toString())
 
                         if (periodeList[i].periodeNaam.equals(
                             spinnerPeriode.selectedItem.toString()
@@ -303,7 +303,7 @@ class DagFragment : Fragment() {
                 }
                 Log.d(
                     "datefucker2",
-                    "periodeDag To Stirng :" + " : " + periodeDag.toString()
+                    "Gast print die string is :" + " : " + periodeDag.toString()
 
                 )
                 val listDates = sortDates(periodeDag)
