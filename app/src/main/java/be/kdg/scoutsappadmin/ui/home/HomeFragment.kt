@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
@@ -23,6 +24,7 @@ import be.kdg.scoutsappadmin.R
 import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
+import be.kdg.scoutsappadmin.model.Rol
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter
@@ -33,7 +35,8 @@ import kotlinx.android.synthetic.main.roundedstreepke_row_item.view.*
 
 
 class HomeFragment : Fragment() {
-    var selected_item = 0
+    var
+            selected_item = 0
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -65,6 +68,7 @@ class HomeFragment : Fragment() {
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
         val addStreepke = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
 
+
         periode.periodeDagen!!.forEach { dag ->
             periodeDagenNaam.add(dag.dagDatum!!.substring(0, 10))
         }
@@ -78,15 +82,18 @@ class HomeFragment : Fragment() {
         }
 
         val firebasePersonen: MutableList<persoonItem> = ArrayList<persoonItem>()
+        val emptyPersonen: MutableList<persoonItem> = ArrayList<persoonItem>()
 
         for (i in 0 until periode.periodePersonen!!.size) {
-            firebasePersonen.add(persoonItem(periode.periodePersonen!![i],this))
+            firebasePersonen.add(persoonItem(periode.periodePersonen!![i], this, false))
         }
 
         firebasePersonen.sortBy { fp ->
             fp.persoon.persoonNaam
         }
+
         personenAdapter.addAll(firebasePersonen)
+        //  personenAdapter.addAll(emptyPersonen)
 
         var recyclerView = root.findViewById<RecyclerView>(R.id.fragment_home_rvPersonenMain);
         var ivButton = root.findViewById<ImageView>(R.id.fragment_home_ivStreepke);
@@ -117,7 +124,7 @@ class HomeFragment : Fragment() {
 
         personenAdapter.setOnItemClickListener { item, view ->
             selectedPosition = item.getPosition(item)
-            /*  personenView.add(view)
+/*  personenView.add(view)
             personenItems.add(item as persoonItem)
             val x = view
             val y = item
@@ -130,23 +137,48 @@ class HomeFragment : Fragment() {
 //           view.persoon_row_naam.setBackgroundColor(Color.parseColor("#ff99cc00"))
 //           view.persoon_row_iv.bringToFront()
 */
+            val itemid = item.id
+
+            val itemPos = personenAdapter.getAdapterPosition(item)
+            val itemPosition = recyclerView.getChildAdapterPosition(view)
 
             val i = item as persoonItem
             val persoon = i.persoon
-            if (item.persoon.persoonNaam.equals(view. .txt_row_naam.text.toString())) {
-                geselecteerdePersonen.remove(item.persoon)
-                roundedImageView.setBackgroundResource(R.drawable.rounded_txt_naam)
-                Log.d("personenLijst", "postition vanuit onlcik adapter=" +  selectedPosition.toString())
-                return@setOnItemClickListener
+            //allePersonen.get(itemPosition + 1) == item.persoon
+            Log.d(
+                "personenLijst",
+                "   allePersonen.get(itemPosition + 1)=" + allePersonen.get(itemPosition).persoonNaam.toString() + "\n" + item.persoon.persoonNaam.toString()
+            )
+            if (itemPos == itemPosition) {
+                if (geselecteerdePersonen.contains(item.persoon) && view.txt_row_count.text.toString()
+                        .toInt() == 0
+                ) {
+                    geselecteerdePersonen.remove(item.persoon)
+                    item.added = false
+                    // view.roundedImageView.setBackgroundResource(R.drawable.rounded_txt_naam)
+                    Log.d(
+                        "personenLijst",
+                        "postition vanuit onlcik adapter=" + selectedPosition.toString()
 
-            } else {
-                geselecteerdePersonen.add(persoon)
-                roundedImageView.setBackgroundResource(R.drawable.bakgroundbeer)
-                Log.d("personenLijst", "postition vanuit onlcik adapter=" +  selectedPosition.toString())
-                return@setOnItemClickListener
+                    )
+                    showHide(view.iv_row_del)
+                    showHide(view.iv_row_add)
+                    showHide(view.txt_row_count)
+                    personenAdapter.notifyItemChanged(itemPosition)
+                    return@setOnItemClickListener
+                } else {
+                    geselecteerdePersonen.add(persoon)
+                    // view.roundedImageView.setBackgroundResource(R.drawable.bakgroundbeer)
+                    item.added = true
+                    showHide(view.iv_row_del)
+                    showHide(view.iv_row_add)
+                    showHide(view.txt_row_count)
+
+                    personenAdapter.notifyItemChanged(itemPosition)
+                    return@setOnItemClickListener
+                }
             }
         }
-        personenAdapter.notifyItemChanged(selectedPosition)
 
         ivButton.setOnClickListener {
             var personenString: String =
@@ -199,16 +231,21 @@ class HomeFragment : Fragment() {
 
 var cardViewList: MutableList<CardView> = ArrayList()
 var selectedCardViewList: MutableList<CardView> = ArrayList()
+
 class persoonItem(
     val persoon: Persoon,
-    val fragment : HomeFragment
+    val fragment: HomeFragment,
+    var added: Boolean
 ) : Item<ViewHolder>() {
+
 
     fun showHide(view: View) {
         view.visibility = if (view.visibility == View.VISIBLE) {
             View.INVISIBLE
-        } else {
+        } else if (view.visibility == View.INVISIBLE || view.visibility == View.GONE) {
             View.VISIBLE
+        } else {
+            return
         }
     }
 
@@ -218,34 +255,52 @@ class persoonItem(
 
     private val lastSelectedPosition = -1 // declare this variable
 
+    override fun getPosition(item: Item<*>): Int {
+        return super.getPosition(item)
+    }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.streepke_item_row.streepke_card.txt_row_naam.text = persoon.persoonNaam
 
+        //viewHolder.setIsRecyclable(false)
+        //viewHolder.setIsRecyclable(false)
+        cardViewList.add(viewHolder.itemView.streepke_item_row.streepke_card); //add all the cards to this list
+        viewHolder.itemView.iv_row_add.setOnClickListener {
 
-        //viewHolder.setIsRecyclable(false)
-        //viewHolder.setIsRecyclable(false)
-        fun showHide(view: View) {
-            view.visibility = if (view.visibility == View.VISIBLE) {
-                View.INVISIBLE
-            } else {
-                View.VISIBLE
-            }
-            cardViewList.add(viewHolder.itemView.streepke_item_row.streepke_card); //add all the cards to this list
-        if(fragment.selected_item == position) {
-            viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.bakgroundbeer)
-            Log.d("personenLijst", "postition vanuit bind=" +  position.toString())
-            showHide(view.iv_row_del)
-            showHide(view.iv_row_add)
-           showHide(view.txt_row_count)
-        } else{
-            viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.rounded_txt_naam)
-          showHide(view.iv_row_del)
-           showHide(view.iv_row_add)
-          showHide(view.txt_row_count)
+            Log.d("PersonenLijst", "\n ====================== \n 1 streepje toegevoegd")
         }
+        viewHolder.itemView.iv_row_add.setOnClickListener {
+            viewHolder.itemView.txt_row_count.text =
+                (viewHolder.itemView.txt_row_count.text.toString().toInt() - 1).toString()
+            Log.d("PersonenLijst", "\n ====================== \n 1 streepje verwijderd")
+        }
+/*        if (persoon.persoonPass.isNullOrEmpty()) {
+            showHide(viewHolder.itemView.streepke_card)
+        }*/
+        if (added) {
+            viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.bakgroundbeer)
+            viewHolder.itemView.iv_row_del.bringToFront()
+            Log.d("PersonenLijst", "\n ====================== \n bg veranderd naar BIER")
+        } else if (!added) {
+            viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.rounded_txt_naam)
+            Log.d("PersonenLijst", "\n ====================== \n bg veranderd naar DEFAULT")
 
-/*     if (cardViewList.contains(viewHolder.itemView.streepke_card)) {
+        }
+/*
+            if (fragment.selected_item == position) {
+                viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.bakgroundbeer)
+                Log.d("personenLijst", "postition vanuit bind=" + position.toString())
+                showHide(view.iv_row_del)
+                showHide(view.iv_row_add)
+                showHide(view.txt_row_count)
+            } else {
+                viewHolder.itemView.roundedImageView.setBackgroundResource(R.drawable.rounded_txt_naam)
+                showHide(view.iv_row_del)
+                showHide(view.iv_row_add)
+                showHide(view.txt_row_count)
+            }
+
+    if (cardViewList.contains(viewHolder.itemView.streepke_card)) {
             cardViewList.add(viewHolder.itemView.streepke_card);
         } else { viewHolder.itemView.streepke_item_row.streepke_card.txt_row_naam.text = persoon.persoonNaam
             }
@@ -273,8 +328,8 @@ class persoonItem(
        )*/
 
 
-        }
     }
+
 }
 
 

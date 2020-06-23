@@ -11,27 +11,26 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/reactiefGreyDark"
+        android:focusableInTouchMode="true"
         android:scrollbarDefaultDelayBeforeFade="400"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:focusableInTouchMode="true"
-        android:scrollbars="none"
-        />
+        app:layout_constraintVertical_bias="1.0" />
 
-        <ImageView
-            android:id="@+id/fragment_home_ivStreepke"
-            android:layout_width="86dp"
-            android:layout_height="80dp"
-            android:src="@drawable/streepke"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.888"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.958" />
+    <ImageView
+        android:id="@+id/fragment_home_ivStreepke"
+        android:layout_width="86dp"
+        android:layout_height="80dp"
+        android:src="@drawable/streepke"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
