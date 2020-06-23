@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="be.kdg.scoutsappadmin.ui.home.HomeFragment">
+    tools:context="be.kdg.scoutsappadmin.ui.home.HomeFragment"
+    android:background="@color/reactiefGreyDark"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_home_rvPersonenMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="65dp"
         android:background="@color/reactiefGreyDark"
         android:focusableInTouchMode="true"
         android:scrollbarDefaultDelayBeforeFade="400"
@@ -25,12 +28,27 @@
         android:id="@+id/fragment_home_ivStreepke"
         android:layout_width="86dp"
         android:layout_height="80dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/streepke"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain"
+        app:layout_constraintVertical_bias="0.548" />
+
+    <TextView
+        android:id="@+id/txtBounce"
+        android:layout_width="309dp"
+        android:layout_height="58dp"
+        android:fontFamily="@font/bungee_inline"
+        android:text="   Strepeke('s) dabei ? "
+        android:textAlignment="viewStart"
+        android:textColor="@color/reactiefGreenLight"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_home_ivStreepke"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
