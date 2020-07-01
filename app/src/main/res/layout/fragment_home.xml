@@ -12,7 +12,7 @@
         android:id="@+id/fragment_home_rvPersonenMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="75dp"
         android:background="@color/reactiefGreyDark"
         android:focusableInTouchMode="true"
         android:scrollbarDefaultDelayBeforeFade="400"
@@ -35,7 +35,7 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain"
-        app:layout_constraintVertical_bias="0.548" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/txtBounce"

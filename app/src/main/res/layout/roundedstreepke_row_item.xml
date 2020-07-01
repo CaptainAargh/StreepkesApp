@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:clickable="true"
     android:elevation="10dp"
     android:orientation="vertical">
 
@@ -18,21 +17,23 @@
         app:cardCornerRadius="25dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card_row_background"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_txt_naam"
+            >
 
 
             <ImageView
                 android:id="@+id/roundedImageView"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/rounded_txt_naam"
+                android:clickable="false"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
 
             <TextView
@@ -50,6 +51,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/roundedImageView"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/txt_row_count"
                 android:layout_width="40dp"
@@ -58,8 +60,7 @@
                 android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_row_del"
-                app:layout_constraintTop_toTopOf="parent"
-               />
+                app:layout_constraintTop_toTopOf="parent" />
             <!--                android:text="0"-->
 
             <!--                ndroid:srcCompat="@drawable/addstreepke"-->
