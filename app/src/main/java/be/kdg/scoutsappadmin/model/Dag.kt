@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.PropertyName
 import kotlinx.android.parcel.Parcelize
-import java.time.LocalDate
 
 @Entity
 @Parcelize

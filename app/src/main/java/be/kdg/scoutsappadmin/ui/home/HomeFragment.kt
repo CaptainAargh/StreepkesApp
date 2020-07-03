@@ -10,13 +10,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProviders
@@ -28,18 +26,12 @@ import be.kdg.scoutsappadmin.R.drawable
 import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
-import be.kdg.scoutsappadmin.model.Rol
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.persoon_row.view.*
-import kotlinx.android.synthetic.main.roundedstreepke_row_item.*
 import kotlinx.android.synthetic.main.roundedstreepke_row_item.view.*
-import kotlinx.android.synthetic.main.roundedstreepke_row_item.view.iv_row_del
 
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")

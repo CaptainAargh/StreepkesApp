@@ -13,7 +13,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.LoginActivity
@@ -27,13 +26,10 @@ import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.fragment_log.*
 import kotlinx.android.synthetic.main.streepke_row.view.*
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.absoluteValue
 import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds
 
 class OverzichtFragment : Fragment() {
 

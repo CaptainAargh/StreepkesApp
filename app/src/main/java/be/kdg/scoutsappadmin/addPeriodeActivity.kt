@@ -17,9 +17,8 @@ import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Dag
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Dag_Persoon
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon
 import be.kdg.scoutsappadmin.model.*
-import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 import java.lang.Long.getLong
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*

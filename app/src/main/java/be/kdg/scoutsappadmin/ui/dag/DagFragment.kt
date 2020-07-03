@@ -17,8 +17,14 @@ import be.kdg.scoutsappadmin.R
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Dag_Persoon
 import be.kdg.scoutsappadmin.fireBaseModels.periodeDagItem
-import be.kdg.scoutsappadmin.model.*
-import com.google.firebase.database.*
+import be.kdg.scoutsappadmin.model.Consumptie
+import be.kdg.scoutsappadmin.model.Dag
+import be.kdg.scoutsappadmin.model.Periode
+import be.kdg.scoutsappadmin.model.Persoon
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_dag.*

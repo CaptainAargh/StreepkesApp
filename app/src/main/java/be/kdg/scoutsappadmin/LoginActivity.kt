@@ -16,7 +16,6 @@ import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Dag
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
-import be.kdg.scoutsappadmin.ui.overzicht.OverzichtFragment
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
