@@ -2,6 +2,7 @@ package be.kdg.scoutsappadmin.ui.home
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -30,6 +31,7 @@ import be.kdg.scoutsappadmin.model.Persoon
 import be.kdg.scoutsappadmin.model.Rol
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -67,10 +69,16 @@ class HomeFragment : Fragment() {
         val btnLogout: Button = header.findViewById(R.id.btnLogout)
         btnLogout.setOnClickListener {
             val intent = Intent(root.context, LoginActivity::class.java)
+            val sharedPreferences = root.context.getSharedPreferences("LOGIN_INFO", Context.MODE_PRIVATE)
+            val prefsEditor = sharedPreferences.edit()
+            prefsEditor.putString("MemPersoon","")
+            prefsEditor.putString("MemPeriode","")
+            sharedPreferences.edit().putBoolean("autoLoginCheck", false).apply()
+            prefsEditor.apply()
             startActivity(intent)
         }
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
-        val addStreepke = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
+        val addStreepke  = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
 
 
         periode.periodeDagen!!.forEach { dag ->
@@ -104,7 +112,11 @@ class HomeFragment : Fragment() {
         firebasePersonen.sortBy { fp ->
             fp.persoon.persoonNaam
         }
-        personenAdapter.addAll(firebasePersonen)
+        val pItem = persoonItem(persoon, this, false, false, false, 0)
+        personenAdapter.add(persoonItem(persoon, this, false, false, false, 0))
+        val removeExist = firebasePersonen.filter { p -> p.persoon.persoonNaam != persoon.persoonNaam }
+        firebasePersonen.remove(pItem)
+            personenAdapter.addAll(removeExist)
         //  personenAdapter.addAll(emptyPersonen)
 
         var recyclerView = root.findViewById<RecyclerView>(R.id.fragment_home_rvPersonenMain);
@@ -161,6 +173,7 @@ class HomeFragment : Fragment() {
                 if (geselecteerdePersonen.contains(item.persoon)
                 // && view.txt_row_count.text.toString().toInt() == 0
                 ) {
+                    itemsGeselecteerd.remove(i)
                     geselecteerdePersonen.remove(item.persoon)
                     item.added = false
                     item.count = 0
@@ -195,6 +208,7 @@ class HomeFragment : Fragment() {
                     .forEach {
                         personenString
                     }
+            itemsGeselecteerd.distinct()
             itemsGeselecteerd.forEach {
                 personenString += "\n " + it.persoon.persoonNaam + " : " + it.count
             }
@@ -211,7 +225,7 @@ class HomeFragment : Fragment() {
             }*/
             for (i in 0 until itemsGeselecteerd.size) {
                 val alertDialog =
-                    AlertDialog.Builder(root.context)
+                    AlertDialog.Builder(root.context,R.style.PopUpConfirmConsumpties)
                 alertDialog.setTitle("Strepke dabei")
                 Log.d("personenString", "String personen " + personenString)
                 alertDialog.setMessage(personenString)
@@ -235,7 +249,13 @@ class HomeFragment : Fragment() {
                                     persoon.key,
                                     System.currentTimeMillis()
                                 )
+
                                 refPeriode_Personen_Streepkes.setValue(c)
+                                    .addOnSuccessListener {
+                                        val toast = Toast.makeText(root.context.applicationContext,
+                                            "Streepkes toegevoegd aan lijst", Toast.LENGTH_SHORT)
+                                        toast.show()
+                                    }
                                 Log.d("addPeriodePersoon", "Jeej succes" + c.toString())
 
                             }

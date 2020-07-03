@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.LoginActivity
@@ -22,14 +23,17 @@ import be.kdg.scoutsappadmin.model.Consumptie
 import be.kdg.scoutsappadmin.model.Dag
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.fragment_log.*
 import kotlinx.android.synthetic.main.streepke_row.view.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
+import kotlin.time.ExperimentalTime
+import kotlin.time.milliseconds
 
 class OverzichtFragment : Fragment() {
 
@@ -43,12 +47,11 @@ class OverzichtFragment : Fragment() {
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onResume() {
         val periode2 = activity!!.intent.getParcelableExtra<Periode>(LoginActivity.PERIODE)
-        fetchAllStreepkes(periode2.key, "totaal")
+        fetchAllStreepkes(periode2.key, 0, "totaal")
         super.onResume()
-
-
     }
 
+    @ExperimentalTime
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,38 +68,35 @@ class OverzichtFragment : Fragment() {
 
         val spinnerSorteer = root.findViewById<Spinner>(R.id.frgOverzicht_spinner)
         rvStreepkes = root.findViewById(R.id.frgOverzicht_rv_Streepkes)
-
-
-        fetchAllStreepkes(periode.key, "totaal")
-
+        // val rvAdapter = GroupAdapter<ViewHolder>()
+        // rvStreepkes.adapter = rvAdapter
+        fetchAllStreepkes(periode.key, 0, "totaal")
+        val rvAdapter = GroupAdapter<ViewHolder>()
+        rvStreepkes.adapter = rvAdapter
         val labelsFilter =
-            listOf<String>("Totaal aantal streepjes", "Vandaag", "Deze Week", "Deze maand")
-
-        var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
-        for (i in 0 until periode.periodePersonen!!.size) {
-            Log.d("size", periode.periodePersonen!![i].toString())
-            gesorteerd.add(
-                consumptieItem(
-                    periode.periodePersonen!![i].persoonNaam!!,
-
-                    periode.periodePersonen!![i].persoonConsumpties!!.size
-                )
+            listOf<String>(
+                "Totaal aantal streepjes",
+                "Vandaag",
+                "Deze Week",
+                "Deze maand",
+                "Uureke geleden"
             )
-        }
-        gesorteerd.sortBy { ci ->
-            ci.aantal
-        }
-
 
         val spinnerArrayAdapter = ArrayAdapter<String>(
             this@OverzichtFragment.context!!,
-            R.layout.support_simple_spinner_dropdown_item,
+            R.layout.spinner_overzicht,
             labelsFilter
         )
         spinnerSorteer.adapter = spinnerArrayAdapter
         spinnerSorteer.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+                fun getDaysAgo(daysAgo: Int = 0, hoursAgo: Int = 0): Date {
+                    val calendar = Calendar.getInstance()
+                    calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
+                    return calendar.time
                 }
 
                 @RequiresApi(Build.VERSION_CODES.O)
@@ -107,16 +107,68 @@ class OverzichtFragment : Fragment() {
                     id: Long
                 ) {
                     if (spinnerSorteer.selectedItem.toString().equals("Vandaag")) {
-                        fetchAllStreepkes(periode.key, "vandaag")
-
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(
+                            activity!!.applicationContext,
+                            "filter vandaag geselecteerd",
+                            duration
+                        )
+                        toast.show()
+                        rvAdapter.clear()
+                        val dateMill = System.currentTimeMillis().minus(86400000)
+                        fetchAllStreepkes(periode.key, dateMill, "totaal")
+                        //  rvAdapter.addAll(getgesorteerd(periode, 1583535600000).reversed())
+                        rvAdapter.notifyDataSetChanged()
                     } else if (spinnerSorteer.selectedItem.toString().equals("Deze Week")) {
-                        fetchAllStreepkes(periode.key, "week")
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(
+                            activity!!.applicationContext,
+                            "filter nu geselecteerd",
+                            duration
+                        )
+                        toast.show()
+                        rvAdapter.clear()
+                        // rvAdapter.addAll(getgesorteerd(periode, 1593739738900).reversed())
+                        val dateMill = System.currentTimeMillis().minus(604800000)
+                        fetchAllStreepkes(periode.key, dateMill, "totaal")
 
+                        //  rvAdapter.addAll(getgesorteerd(periode, 1593777201000, "Week").reversed())
+
+                        rvAdapter.notifyDataSetChanged()
                     } else if (spinnerSorteer.selectedItem.toString().equals("Deze maand")) {
-                        fetchAllStreepkes(periode.key, "maand")
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(
+                            activity!!.applicationContext,
+                            "filter maand geselecteerd",
+                            duration
+                        )
 
+                        toast.show()
+                        rvAdapter.clear()
+                        fetchAllStreepkes(periode.key, 2628002880, "totaal")
+                        rvAdapter.notifyDataSetChanged()
+                    } else if (spinnerSorteer.selectedItem.toString().equals("Uureke geleden")) {
+                        val duration = Toast.LENGTH_SHORT
+                        val toast = Toast.makeText(
+                            activity!!.applicationContext,
+                            "filter uureke geselecteerd",
+                            duration
+                        )
+                        var count = 0
+                        periode.periodePersonen!!.forEach {
+                            count += it.persoonConsumpties!!.size
+                        }
+                        toast.show()
+                        rvAdapter.clear()
+                        fetchAllStreepkes(periode.key,0, "Uureke geleden" )
+                        rvAdapter.add(consumptieItem(" a moeder ", count))
+                        rvAdapter.notifyDataSetChanged()
                     } else {
-                        fetchAllStreepkes(periode.key, "totaal")
+                        rvAdapter.clear()
+                        //rvAdapter.addAll(getgesorteerd(periode, 0, "totaal").reversed())
+                        fetchAllStreepkes(periode.key, 0, "totaal")
+                        rvAdapter.notifyDataSetChanged()
+
                     }
 
 
@@ -125,24 +177,74 @@ class OverzichtFragment : Fragment() {
         return root
     }
 
-    private fun fetchAllStreepkes(key: String, filter: String) {
+    fun getgesorteerd(periode: Periode, tijdfilter: Long, filter: String): List<consumptieItem> {
+        var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
+        val consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
+
+        periode.periodePersonen!!.forEach {
+            var count = 0
+            for (i in 0 until it.persoonConsumpties!!.size) {
+                // val timeStamppc = it.persoonConsumpties!![i].timeStamp
+                // if ((timeStamppc.compareTo(tijdfilter)) > 0) {
+                if ((it.persoonConsumpties!![i].timeStamp / 1000) >= tijdfilter / 1000) {
+                    Log.d(
+
+                        "ciitems",
+                        "(it.persoonConsumpties!![i].timeStamp/1000).toULong()   =     \n             "
+                                + (it.persoonConsumpties!![i].timeStamp / 1000).toULong()
+                                + "\n (tijdfilter/1000).toULong() =    \n" +
+                                "             "
+                                + (tijdfilter / 1000).toULong()
+                    )
+                    count++
+                }
+            }
+            if (count > 0 && filter != "totaal") {
+                gesorteerd.add(
+                    consumptieItem(
+                        it.persoonNaam!!,
+                        count
+                    )
+                )
+            } else if (filter == "totaal") {
+                gesorteerd.add(
+                    consumptieItem(
+                        it.persoonNaam!!,
+                        count
+                    )
+                )
+            }
+        }
+        gesorteerd.sortBy { ci ->
+            ci.aantal
+        }
+        gesorteerd.distinctBy {
+            it.naam
+        }
+        Log.d("ciitems", "totale lijst :======================\n" + gesorteerd.toString())
+        gesorteerd.forEach {
+            "item \n" + it.toString() +
+                    "Naam \n" + it.naam +
+                    "aantal \n" + it.aantal.toString()
+        }
+        Log.d("ciitems", "totale lijst :======================\n" + gesorteerd.toString())
+
+        return gesorteerd.toList()
+    }
+
+
+    private fun fetchAllStreepkes(key: String, tijdFilter: Long, filter: String): Periode {
         val ref = FirebaseDatabase.getInstance().getReference("/periodes/${key}")
         val list: MutableList<Periode?> = ArrayList<Periode?>()
         val namenList: MutableList<String> = ArrayList<String>()
-        val rvAdapter = GroupAdapter<ViewHolder>()
 
+        var periodeReturn = Periode()
 
-        ref.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("UseRequireInsteadOfGet")
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+        ref.addValueEventListener(object : ValueEventListener, ChildEventListener {
+            fun getPeriode(periodeFb: FireBasePeriode) {
                 val dagenList = periodeFb!!.periodeDagen.values.toList()
                 val personenList = periodeFb.periodePersonen.values.toList()
-                val periodeFilterTijd = ArrayList<consumptieItem>()
+                var periodeFilterTijd = ArrayList<consumptieItem>()
 
                 var periodeDagenList = ArrayList<Dag>()
                 var periodePersonenList = ArrayList<Persoon>()
@@ -220,79 +322,66 @@ class OverzichtFragment : Fragment() {
                         periodeDagenList,
                         periodePersonenList
                     )
-                    list.add(periode)
-                    Log.d("getOverzicht", "periode " + periode)
-                    list.forEach { e ->
-                        Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
+                    val returnPeriode = getgesorteerd(periode, tijdFilter, filter)
+                    val rvAdapter = GroupAdapter<ViewHolder>()
+                    rvStreepkes.adapter = rvAdapter
+                    var count = 0
+                    periode.periodePersonen!!.forEach {
+                        count += it.persoonConsumpties!!.size
                     }
+                    if (filter == "Uureke geleden") {
+                        rvAdapter.add(consumptieItem(" a moeder ", count))
+                        rvAdapter.notifyDataSetChanged()
 
-                    fun getgesorteerd(tijdfiler:Long) {
-
-                        var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
-                        for (i in 0 until periode.periodePersonen!!.size) {
-
-                            var consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
-                            var persoonLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
-                            periode.periodePersonen!![i].persoonConsumpties!!.forEach { pc ->
-                                if (pc.timeStamp > tijdfiler) {
-                                    consumptieLijst.add(pc)
-                                }
-                            }
-                            Log.d("size", periode.periodePersonen!![i].toString())
-                            gesorteerd.add(
-                                consumptieItem(
-                                    periode.periodePersonen!![i].persoonNaam!!,
-
-                                    periode.periodePersonen!![i].persoonConsumpties!!.size
-                                )
-                            )
-
-                            gesorteerd.sortBy { ci ->
-                                ci.aantal
-                            }
-                            gesorteerd.forEach { e ->
-                                periodeFilterTijd.add(e)
-                            }
-                            rvAdapter.clear()
-                            rvAdapter.addAll(gesorteerd.reversed())
-                            rvStreepkes.adapter = rvAdapter
-                            list.add(periode)
-                            Log.d("getOverzicht", "periode " + periode)
-                            list.forEach { e ->
-                                Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
-                            }
+                    } else {
+                        rvAdapter.addAll(returnPeriode.reversed())
+                        rvAdapter.notifyDataSetChanged()
+                        list.add(periode)
+                        Log.d("getOverzicht", "periode " + periode)
+                        list.forEach { e ->
+                            Log.d("getOverzicht2", "periode toegeveogd en returned " + e)
                         }
                     }
 
 
-                    if (filter.equals("maand")) {
-
-
-                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                    } else if (filter.equals("week")) {
-
-
-                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                    } else if (filter.equals("vandaag")) {
-                        val duration = Toast.LENGTH_SHORT
-                        val toast = Toast.makeText(activity!!.applicationContext, "filter vandaag geselecteerd", duration)
-                        toast.show()
-                        getgesorteerd(1590357600000)
-
-                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                        Log.d("oncreate", "Rerun van oncreate met paramter " + filter)
-                    } else {
-                        getgesorteerd(0)
-
-                    }
-
                 }
+            }
 
+            @SuppressLint("UseRequireInsteadOfGet")
+            override fun onCancelled(p0: DatabaseError) {
 
             }
-        })
 
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                periodeFb?.let { getPeriode(it) }
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                periodeFb?.let { getPeriode(it) }
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                periodeFb?.let { getPeriode(it) }
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                periodeFb?.let { getPeriode(it) }
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onDataChange(p0: DataSnapshot) {
+                val periodeFb = p0.getValue(FireBasePeriode::class.java)
+                periodeFb?.let { getPeriode(it) }
+            }
+
+        })
+        return periodeReturn
     }
+
 }
 
 class consumptieItem(
@@ -303,8 +392,8 @@ class consumptieItem(
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.streepke_row_txtNr.text = (position + 1).toString() + ". "
         viewHolder.itemView.streepke_row_txtNaam.text = naam
         viewHolder.itemView.streepke_row_txtAantal.text = aantal.toString()
     }
-
 }

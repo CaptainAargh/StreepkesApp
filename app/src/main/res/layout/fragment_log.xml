@@ -8,14 +8,12 @@
 
     <Button
         android:id="@+id/frgLog_btn_addConsumatie"
-        android:layout_width="210dp"
-        android:layout_height="39dp"
+        android:layout_width="208dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Voeg streepjes toe"
-        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frgLog_txt_aantalStreepjes"
         app:layout_constraintTop_toBottomOf="@+id/frgLog_Spinner_naam" />
@@ -24,10 +22,10 @@
         android:id="@+id/frgLog_Spinner_naamStreepjes"
         android:layout_width="0dp"
         android:layout_height="28dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
         app:layout_constraintEnd_toStartOf="@+id/frgLog_txt_aantalStreepjes"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_btn_addConsumatie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frgLog_Spinner_naam"
@@ -53,7 +50,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_txt_aantalStreepjes"
         app:layout_constraintEnd_toStartOf="@+id/frgLog_Spinner_gegevenDoor"
         app:layout_constraintStart_toEndOf="@+id/frgLog_Spinner_dag"
@@ -64,8 +60,8 @@
         android:layout_width="0dp"
         android:layout_height="19dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="Gegeven door"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_Spinner_gegevenDoor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,21 +81,6 @@
         app:layout_constraintStart_toEndOf="@+id/frgLog_lb_dag"
         app:layout_constraintTop_toBottomOf="@+id/frgLog_Spinner_Periode" />
 
-    <TextView
-        android:id="@+id/frgLog_lb_Periode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:text="Selecteer Periode"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/frgLog_Spinner_Periode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Spinner
         android:id="@+id/frgLog_Spinner_Periode"
         android:layout_width="0dp"
@@ -107,20 +88,18 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_lb_naam"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frgLog_lb_Periode" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/frgLog_Spinner_dag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_Spinner_naamStreepjes"
         app:layout_constraintEnd_toStartOf="@+id/frgLog_Spinner_naam"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +107,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/frgOverzicht_rv_Streepkes"
-        android:layout_width="411dp"
-        android:layout_height="468dp"
+        android:layout_width="413dp"
+        android:layout_height="440dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,8 +119,7 @@
         android:id="@+id/frgLog_lb_dag"
         android:layout_width="0dp"
         android:layout_height="19dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:text="Dag"
         app:layout_constraintBottom_toTopOf="@+id/frgLog_Spinner_dag"
@@ -150,9 +129,8 @@
 
     <EditText
         android:id="@+id/frgLog_txt_aantalStreepjes"
-        android:layout_width="29dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="45dp"
+        android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -162,5 +140,18 @@
         app:layout_constraintEnd_toStartOf="@+id/frgLog_btn_addConsumatie"
         app:layout_constraintStart_toEndOf="@+id/frgLog_Spinner_naamStreepjes"
         app:layout_constraintTop_toBottomOf="@+id/frgLog_Spinner_naam" />
+
+    <Button
+        android:id="@+id/frgLog_btn_delConsumatie"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Verwijder streepjes"
+        app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
+        app:layout_constraintEnd_toEndOf="@+id/frgLog_btn_addConsumatie"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/frgLog_btn_addConsumatie"
+        app:layout_constraintTop_toBottomOf="@+id/frgLog_btn_addConsumatie" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

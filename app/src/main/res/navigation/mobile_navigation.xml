@@ -28,16 +28,25 @@
             android:name="myArg"
             app:argType="string" />
     </fragment>
-
     <fragment
         android:id="@+id/nav_gallery"
         android:name="be.kdg.scoutsappadmin.ui.overzicht.OverzichtFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_overzicht" />
-
+    <fragment
+        android:id="@+id/nav_dagInstellingen"
+        android:name="be.kdg.scoutsappadmin.ui.home_admin.HomeFragment_admin"
+        android:label="@string/menu_gallery_admin"
+        tools:layout="@layout/fragment_dag" />
+    <fragment
+        android:id="@+id/nav_periodeInstellingen"
+        android:name="be.kdg.scoutsappadmin.ui.dag.DagFragment"
+        android:label="@string/menu_gallery_admin"
+        tools:layout="@layout/fragment_home_admin" />
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="be.kdg.scoutsappadmin.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="be.kdg.scoutsappadmin.ui.log.LogFragment"
+        android:label="@string/menu_slideshow_admin"
+        tools:layout="@layout/fragment_groepsPaneel" />
+
 </navigation>

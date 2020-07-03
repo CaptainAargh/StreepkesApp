@@ -3,7 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/border">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="400dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtOp_lbale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rounded_txt_naam" />
 
     <TextView
         android:id="@+id/row_log_txtop"
@@ -22,7 +34,7 @@
 
     <TextView
         android:id="@+id/txtOp_lbale"
-        android:layout_width="0dp"
+        android:layout_width="45dp"
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -35,7 +47,7 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="0dp"
+        android:layout_width="45dp"
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -48,8 +60,8 @@
 
     <ImageView
         android:id="@+id/row_log_ivPintje"
-        android:layout_width="67dp"
-        android:layout_height="54dp"
+        android:layout_width="37dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +74,7 @@
         android:id="@+id/row_log_txtNaam"
         android:layout_width="129dp"
         android:layout_height="23dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="SlanegehalVogel"

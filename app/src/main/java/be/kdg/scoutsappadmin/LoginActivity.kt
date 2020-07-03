@@ -12,12 +12,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon_Consumpties
-import be.kdg.scoutsappadmin.model.*
-import com.google.android.material.navigation.NavigationView
+import be.kdg.scoutsappadmin.model.Consumptie
+import be.kdg.scoutsappadmin.model.Dag
+import be.kdg.scoutsappadmin.model.Periode
+import be.kdg.scoutsappadmin.model.Persoon
+import be.kdg.scoutsappadmin.ui.overzicht.OverzichtFragment
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 
 
 class LoginActivity : AppCompatActivity() {
@@ -37,8 +41,6 @@ class LoginActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val sharedPreferences = getSharedPreferences("LOGIN_INFO",Context.MODE_PRIVATE)
-
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -49,35 +51,70 @@ class LoginActivity : AppCompatActivity() {
 
         txtNaam = findViewById(R.id.login_txt_name)
         txtPass = findViewById(R.id.login_txt_pass)
+
         fetchAllPeriodes()
 
+        val periodeSelected = getSelectedPeriod()
 
-        cbLogin.setOnCheckedChangeListener{ compoundButton: CompoundButton, b: Boolean ->
-            if (cbLogin.isChecked) {
-
-            } else {
+        val sharedPreferences = getSharedPreferences("LOGIN_INFO", Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean(
+                "autoLoginCheck",
+                false
+            ) && !sharedPreferences.getString("MemPersoon", "").isNullOrEmpty()
+        ) {
+            checkAutoLogin()
+        }
+        val message = intent.getStringExtra("refresh")
+        if (message == "refresh") {
+            val sharedPreferences = getSharedPreferences("LOGIN_INFO", Context.MODE_PRIVATE)
+            val gson = Gson()
+            val jsonPersoon = sharedPreferences.getString("MemPersoon", "")
+            val jsonPeriode = sharedPreferences.getString("MemPeriode", "")
+            val persoonMem: Persoon = gson.fromJson(jsonPersoon, Persoon::class.java)
+            val periodeMem: Periode = gson.fromJson(jsonPeriode, Periode::class.java)
+            Log.d("refreshtest", "JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            checkLogin(periodeSelected, persoonMem.persoonNaam!!, persoonMem.persoonPass!!)
+            val intent = Intent(this, StreepkeActivity::class.java).apply {
 
             }
+            startActivity(intent)
+            getSelectedPeriod()
         }
 
         btnLogin.setOnClickListener {
-            if (cbLogin.isChecked) {
-
-            }
             val periodeSelected = getSelectedPeriod()
-            checkLogin(periodeSelected)
+            checkLogin(periodeSelected, txtNaam.text.toString(), txtPass.text.toString())
+            //checkAutoLogin(periodeSelected)
+        }
+    }
+
+    private fun checkAutoLogin() {
+        val periodeJson = getSelectedPeriod()
+        val sharedPreferences = getSharedPreferences("LOGIN_INFO", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonPersoon = sharedPreferences.getString("MemPersoon", "")
+        if (periodeJson.periodePersonen!!.size > 0 ) {
+            val intent = Intent(this, StreepkeActivity::class.java)
+            intent.putExtra(PERIODE, periodeJson)
+            intent.putExtra(GEBRUIKER, jsonPersoon)
+            startActivity(intent)
+        } else {
+            val jsonPeriode = sharedPreferences.getString("MemPeriode", "")
+            val persoonMem: Persoon = gson.fromJson(jsonPersoon, Persoon::class.java)
+            val periodeMem: Periode = gson.fromJson(jsonPeriode, Periode::class.java)
+            val intent = Intent(this, StreepkeActivity::class.java)
+            intent.putExtra(PERIODE, periodeMem)
+            intent.putExtra(GEBRUIKER, persoonMem)
+            startActivity(intent)
 
         }
 
-
     }
-
 
     private fun getSelectedPeriod(): Periode {
         val ref = FirebaseDatabase.getInstance().getReference("/periodes")
         val selectedPeriode = Periode()
         ref.addChildEventListener(object : ChildEventListener {
-
             @SuppressLint("UseRequireInsteadOfGet")
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val periodeFbNaam = p0.getValue(FireBasePeriode::class.java)
@@ -89,7 +126,6 @@ class LoginActivity : AppCompatActivity() {
 
                     }
                 }
-
                 Log.d("consumptes", consumpties.toString())
                 consumpties.forEach { c -> Log.d("consumptes", "c" + c.toString()) }
 
@@ -101,7 +137,8 @@ class LoginActivity : AppCompatActivity() {
                     var periodePersonenList = ArrayList<Persoon>()
 
                     for (i in 0 until dagenList.size) {
-                        var periode_dag_personen_lijst: MutableList<Persoon> = ArrayList<Persoon>()
+                        var periode_dag_personen_lijst: MutableList<Persoon> =
+                            ArrayList<Persoon>()
                         for (j in 0 until dagenList[i].dagPersonen.size) {
                             var tussenLijst = dagenList[i].dagPersonen.values.toList()
                             var periode_dag_personen_consumpties_lijst: MutableList<Consumptie> =
@@ -171,7 +208,7 @@ class LoginActivity : AppCompatActivity() {
                         periodePersonenList
                     )
 
-                    checkLogin(periode)
+                    checkLogin(periode, txtNaam.text.toString(),txtPass.text.toString())
                     Log.d("Login", "Namen van firebasePeriode " + periode)
 
                 }
@@ -198,30 +235,48 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("ResourceType", "CommitPrefEdits")
-    private fun checkLogin(p: Periode) {
+    @SuppressLint("CommitPrefEdits")
+    private fun checkLogin(p: Periode, naam: String, pass: String) {
+
         val naamLogin = txtNaam.text.toString()
         val naamPass = txtPass.text.toString()
 
-        if (naamLogin.equals("admin") && naamPass.equals("admin")) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        } else {
-            for (i in 0 until p.periodePersonen!!.size) {
+        for (i in 0 until p.periodePersonen!!.size) {
+            if (p.periodePersonen!![i].persoonNaam.equals(naam) && p.periodePersonen!![i].persoonPass.equals(
+                    pass
+                ) ){
+                val intent = Intent(this, StreepkeActivity::class.java)
+                intent.putExtra(PERIODE, p)
+                intent.putExtra(GEBRUIKER, p.periodePersonen!![i])
+                startActivity(intent)
+                }
                 if (p.periodePersonen!![i].persoonNaam.equals(naamLogin) && p.periodePersonen!![i].persoonPass.equals(
                         naamPass
                     )
                 ) {
-                    if (p.periodePersonen!![i].persoonRol.equals(Rol.GROEPSLEIDING)) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                    if (cbLogin.isChecked) {
+                        val sharedPreferences =
+                            getSharedPreferences("LOGIN_INFO", Context.MODE_PRIVATE)
+                        val memPersoon = p.periodePersonen!![i]
+                        val memPeriode = p
+                        val prefsEditor = sharedPreferences.edit()
+                        val gson = Gson()
+                        val jsonPersoon = gson.toJson(memPersoon);
+                        val jsonPeriode = gson.toJson(memPeriode);
+                        prefsEditor.putString("MemPersoon", jsonPersoon);
+                        prefsEditor.putString("MemPeriode", jsonPeriode);
+                        prefsEditor.apply();
+                        sharedPreferences.edit().putBoolean("autoLoginCheck", true).apply()
+                        Log.d(
+                            "prefs",
+                            sharedPreferences.getBoolean("autoLoginCheck", false).toString()
+                        )
                     }
                     val intent = Intent(this, StreepkeActivity::class.java)
                     intent.putExtra(PERIODE, p)
                     intent.putExtra(GEBRUIKER, p.periodePersonen!![i])
                     startActivity(intent)
                 }
-            }
         }
     }
 
@@ -358,12 +413,9 @@ class LoginActivity : AppCompatActivity() {
             }
 
         })
-
-
     }
 
 
 }
-
 
 

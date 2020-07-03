@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
 
             android:id="@+id/nav_home"
-            android:icon="@mipmap/ic_beer_foreground"
+            android:icon="@drawable/addstreepke"
             android:title="Streepke toevoegen" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@mipmap/ic_overzicht_foreground"
             android:title="Overzicht" />
-<!--
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-        -->
+            android:title="@string/menu_slideshow_admin" />
+        <item
+            android:id="@+id/nav_dagInstellingen"
+            android:icon="@mipmap/ic_beer"
+            android:title="@string/menu_home_admin" />
+        <item
+            android:id="@+id/nav_periodeInstellingen"
+            android:icon="@mipmap/ic_overzicht"
+            android:title="@string/menu_gallery_admin" />
+
+
+        <!--
+                <item
+                    android:id="@+id/nav_slideshow"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_slideshow" />
+                -->
     </group>
 </menu>

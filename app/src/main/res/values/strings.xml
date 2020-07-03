@@ -127,8 +127,12 @@
     </string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-    <string name="login_naam">admin</string>
-    <string name="login_pass">admin</string>
+
+    <string name="login_naam"></string>
+    <string name="login_pass"></string>
+    <string name="login_check">0</string>
+
+
     <string name="title_activity_streepke">StreepkeActivity</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
@@ -136,6 +140,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Overzicht</string>
     <string name="menu_slideshow">Under Construction</string>
+
 
 
 </resources>

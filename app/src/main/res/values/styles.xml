@@ -3,10 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <item name="CustomChipChoice">@style/CustomChipChoiceStyle</item>
+        <item name="android:colorBackground">@color/reactiefGreyDark</item>
 
         <!-- Customize your theme here. -->
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
-        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimary">@color/reactiefGreenLight</item>
         <item name="colorPrimaryDark">@color/reactiefBlack</item>
         <item name="colorAccent">@color/reactiefGreyDark</item>
     </style>
@@ -44,5 +45,13 @@
         <item name="android:layout_marginRight">80dp</item>
 
 
+    </style>
+    <style name="PopUpConfirmConsumpties" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/reactiefBlack</item>
+        <item name="colorPrimary">@color/reactiefGreenLight</item>
+        <item name="colorPrimaryDark">@color/reactiefBlack</item>
+        <item name="colorAccent">@color/reactiefGreyDark</item>
+        <item name="android:textColor">@color/reactiefGreenLight</item>
+        <item name="android:textColorPrimary">#ffff</item>
     </style>
 </resources>

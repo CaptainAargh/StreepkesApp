@@ -12,11 +12,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.kdg.scoutsappadmin.R
-import be.kdg.scoutsappadmin.fireBaseModels.*
-import be.kdg.scoutsappadmin.model.*
+import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode
+import be.kdg.scoutsappadmin.model.Consumptie
+import be.kdg.scoutsappadmin.model.Dag
+import be.kdg.scoutsappadmin.model.Periode
+import be.kdg.scoutsappadmin.model.Persoon
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,8 +49,9 @@ class LogFragment : Fragment() {
 
     private lateinit var txtAantalStreepjes: TextView
 
+    private var consumptieItems: MutableList<consumptieItem> = ArrayList<consumptieItem>()
+
     private lateinit var rvLog: RecyclerView
-    val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,14 +80,113 @@ class LogFragment : Fragment() {
 
         rvLog = root.findViewById(R.id.frgOverzicht_rv_Streepkes)
         rvLog.layoutManager = LinearLayoutManager(this.context)
-
         fetchAllStreepkes()
 
-        rvLog.adapter = adapter
 
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                Toast.makeText(context, "on Move", Toast.LENGTH_SHORT).show()
+                return false
+            }
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                Toast.makeText(context, "on Swiped ", Toast.LENGTH_SHORT).show()
+                //Remove swiped item from list and notify the RecyclerView
+                val position = viewHolder.adapterPosition
+                //arrayList.remove(position)
+               // adapter.notifyDataSetChanged()
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(rvLog)
         return root
 
+    }
+
+    private fun getDateTime(s: String): String? {
+        try {
+            val sdf = SimpleDateFormat("MM/dd/yyyy")
+            val netDate = Date(s)
+            return sdf.format(netDate)
+        } catch (e: Exception) {
+            return e.toString()
+        }
+    }
+
+    private fun getAlleStreepjes(periode: Periode): MutableList<consumptieItem> {
+        val lijstConsumpties: MutableList<consumptieItem> = ArrayList<consumptieItem>()
+        val lijstConsumptiesUnParched: MutableList<consumptieMerged> = ArrayList<consumptieMerged>()
+        for (i in 0 until periode.periodePersonen!!.size) {
+            for (j in 0 until periode.periodePersonen!![i].persoonConsumpties!!.size) {
+                if (periode.periodePersonen!![i].persoonConsumpties!!.isNotEmpty()) {
+                    lijstConsumptiesUnParched.add(
+                        consumptieMerged(
+                            periode.periodePersonen!![i].persoonNaam!!,
+                            periode.periodePersonen!![i].persoonConsumpties!![j].consumptieGegevenDoor!!,
+                            periode.periodePersonen!![i].persoonConsumpties!![j].timeStamp
+                        )
+                    )
+                }
+            }
+        }
+        lijstConsumptiesUnParched.sortByDescending { it.op }
+        lijstConsumptiesUnParched.forEach {
+            val sdf = SimpleDateFormat("dd/MM/yy hh:mm:ss a")
+            val netDate = Date(it.op)
+            val date = sdf.format(netDate)
+            lijstConsumpties.add(
+                consumptieItem(
+                    it.naam,
+                    it.door,
+                    date
+                )
+            )
+        }
+
+        /*
+        periode.periodePersonen!!.forEach {
+            lijstConsumptiesUnParched.add(it.persoonNaam,it.persoonConsumpties)
+            }
+        lijstConsumptiesUnParched.sortBy {
+            it.timeStamp
+        }
+        lijstConsumptiesUnParched.forEach {
+            val sdf = SimpleDateFormat("dd/MM/yy hh:mm:ss a")
+            val netDate = Date(it.timeStamp)
+            val date =sdf.format(netDate)
+            lijstConsumpties.add(
+                consumptieItem(
+                    p.persoonNaam!!,
+                    it.consumptieGegevenDoor!!,
+                    date
+                )
+            )
+        }
+
+        val p = periode.periodePersonen!!.forEach { p ->
+            p.persoonConsumpties!!.sortedByDescending {
+                it.timeStamp
+            }.forEach {
+                val sdf = SimpleDateFormat("dd/MM/yy hh:mm:ss a")
+                val netDate = Date(it.timeStamp)
+                val date =sdf.format(netDate)
+                lijstConsumpties.add(
+                    consumptieItem(
+                        p.persoonNaam!!,
+                        it.consumptieGegevenDoor!!,
+                        date
+                    )
+                )
+            }
+        }*/
+        return lijstConsumpties
     }
 
     private fun fetchAllStreepkes() {
@@ -176,12 +280,10 @@ class LogFragment : Fragment() {
                         periodeDagenList,
                         periodePersonenList
                     )
+
+
                     namenList.add(periode.periodeNaam!!)
                     periodeList.add(periode)
-
-
-
-
 
                     Log.d("getPeriodes", periode.toString())
                     Log.d("getPeriodes", periode.periodeDagen.toString())
@@ -214,6 +316,12 @@ class LogFragment : Fragment() {
                                     )
                                 ) {
                                     p = periodeList[i]
+                                    val logAdapter = GroupAdapter<ViewHolder>()
+                                    val streepjesLogitems = getAlleStreepjes(p)
+                                    logAdapter.addAll(streepjesLogitems)
+                                    rvLog.adapter = logAdapter
+
+
                                 }
 
                             }
@@ -232,7 +340,7 @@ class LogFragment : Fragment() {
                             for (x in 0 until lijstPersonen!!.size) {
                                 lijstPersonenString.add(lijstPersonen[x].persoonNaam!!)
                             }
-                            val spinnerArrayAdapterGegevenDoor= ArrayAdapter<String>(
+                            val spinnerArrayAdapterGegevenDoor = ArrayAdapter<String>(
                                 this@LogFragment.context!!,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 lijstPersonenString
@@ -255,7 +363,7 @@ class LogFragment : Fragment() {
                             for (x in 0 until lijstPersonen!!.size) {
                                 lijstPersonenString.add(lijstPersonen[x].persoonNaam!!)
                             }
-                            val spinnerArrayAdapterWijzigStreepjes= ArrayAdapter<String>(
+                            val spinnerArrayAdapterWijzigStreepjes = ArrayAdapter<String>(
                                 this@LogFragment.context!!,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 lijstPersonenString
@@ -344,6 +452,7 @@ class LogFragment : Fragment() {
                                 dates.sort()
                                 return dates
                             }
+
                             val listDates = sortDates(periodeDag)
                             val dagenLijst = ArrayList<String>()
                             for (i in 0 until listDates.size) {
@@ -379,6 +488,7 @@ class LogFragment : Fragment() {
                                 frgDag_btn_addPerson.setEnabled(false)
                             }
 
+
                         }
                     }
             }
@@ -402,7 +512,7 @@ class LogFragment : Fragment() {
 
 
 class consumptieItem(
-    val naam: String, val aantal: Int
+    val naam: String, val door: String, val op: String
 ) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.row_streepjes_log
@@ -410,7 +520,16 @@ class consumptieItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.row_log_txtNaam.text = naam
-        viewHolder.itemView.row_log_txtDoor.text = aantal.toString()
+        viewHolder.itemView.row_log_txtDoor.text = door
+        viewHolder.itemView.row_log_txtop.text = op
+
     }
+
+
+}
+
+class consumptieMerged(
+    val naam: String, val door: String, val op: Long
+) {
 
 }

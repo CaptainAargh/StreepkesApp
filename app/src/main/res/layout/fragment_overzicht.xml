@@ -5,7 +5,10 @@
     android:background="@color/background_material_light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="be.kdg.scoutsappadmin.OverzichtActivity">
+    tools:context="be.kdg.scoutsappadmin.OverzichtActivity"
+    android:backgroundTint="@color/reactiefGreyDark"
+
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/frgOverzicht_rv_Streepkes"
@@ -15,24 +18,25 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frgOverzicht_spinner" />
 
     <Spinner
         android:id="@+id/frgOverzicht_spinner"
+        style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:entries="@array/lijstOverzicht"
+        android:foregroundTint="#FFFFFF"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/frgOverzicht_rv_Streepkes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

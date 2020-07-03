@@ -3,13 +3,12 @@ package be.kdg.scoutsappadmin
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,7 +16,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import be.kdg.scoutsappadmin.model.Periode
 import be.kdg.scoutsappadmin.model.Persoon
+import be.kdg.scoutsappadmin.model.Rol
 import be.kdg.scoutsappadmin.ui.home.HomeFragment
+import be.kdg.scoutsappadmin.ui.overzicht.OverzichtFragment
 import com.google.android.material.navigation.NavigationView
 
 class StreepkeActivity : AppCompatActivity() {
@@ -56,17 +57,25 @@ class StreepkeActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_periodeInstellingen, R.id.nav_dagInstellingen
             ), drawerLayout
         )
+
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val navigationView: NavigationView =  findViewById(R.id.nav_view_Streepke)
         val header: View = navigationView.getHeaderView(0)
-        val teext: TextView = header.findViewById(R.id.nav_header_txtNaam)
+        val text: TextView = header.findViewById(R.id.nav_header_txtNaam)
+
 
         navView.setBackgroundColor(getResources().getColor(R.color.reactiegGreyLight));
+        if (persoon.persoonRol != Rol.GROEPSLEIDING) {
+            navView.menu.findItem(R.id.nav_dagInstellingen).isVisible = false
+            navView.menu.findItem(R.id.nav_periodeInstellingen).isVisible = false
+            navView.menu.findItem(R.id.nav_slideshow).isVisible = false
+        }
 
     }
 
@@ -81,4 +90,5 @@ class StreepkeActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 }
