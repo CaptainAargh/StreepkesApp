@@ -27,6 +27,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="0dp"
+        android:layout_height="379dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="157dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gifPopup"
+        app:srcCompat="@drawable/border" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="312dp"
@@ -49,7 +63,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
-        android:text="© Nathan Van Hof aka Lemming aka TeamWebsite 2020 Wete nog dieje corona? Ja da was toen "
+        android:text='© Nathan Van Hof aka "Zatte" Lemming'
         android:textAlignment="center"
         android:textColor="@color/reactiefGreenDark"
         android:textSize="15dp"
