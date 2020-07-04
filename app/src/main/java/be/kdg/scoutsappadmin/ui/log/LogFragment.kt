@@ -68,7 +68,6 @@ class LogFragment : Fragment() {
             //   textView.text = it
         })
 
-        btnAddConsumptie = root.findViewById(R.id.frgLog_btn_addConsumatie)
 
         spinnerNaamStreepjes = root.findViewById(R.id.frgLog_Spinner_naamStreepjes)
         spinnerGegevenDoor = root.findViewById(R.id.frgLog_Spinner_gegevenDoor)
@@ -101,7 +100,7 @@ class LogFragment : Fragment() {
                 //Remove swiped item from list and notify the RecyclerView
                 val position = viewHolder.adapterPosition
                 //arrayList.remove(position)
-               // adapter.notifyDataSetChanged()
+                // adapter.notifyDataSetChanged()
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

@@ -10,15 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="be.k.s.ui.social.SocialMainActivity"
-            android:label="@string/title_activity_social_main"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".roddelDetailActivity" />
+        <activity android:name=".addRoddelActivity" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".LoadingScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".roddeldetailzonderphotoactivity"
+            android:label="roddelDetailZonderPhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".StreepkeActivity"
             android:label="@string/title_activity_streepke"

@@ -212,6 +212,7 @@ class HomeFragment : Fragment() {
         itemsGeselecteerd
 
         ivButton.setOnClickListener {
+            if (itemsGeselecteerd.size<1) return@setOnClickListener
 
             var personenString =
                 "Dubbelcheckt da nog is effeke \n"
@@ -353,7 +354,7 @@ class HomeFragment : Fragment() {
 
 
                                     }
-                                val SPLASH_TIME_OUT:Long = (2000*totaalStreepkes+1000).toLong() // 5150 perfect sec
+                                val SPLASH_TIME_OUT:Long = (2200*totaalStreepkes).toLong() // 5150 perfect sec
                                 Handler().postDelayed({
                                     // This method will be executed once the timer is over
                                     setInvisible(gifLoader)

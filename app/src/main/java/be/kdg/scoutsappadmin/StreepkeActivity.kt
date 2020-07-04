@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -48,8 +49,8 @@ class StreepkeActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
- */
 
+ */
         val periode = intent.getParcelableExtra<Periode>(LoginActivity.PERIODE)
         val persoon = intent.getParcelableExtra<Persoon>(LoginActivity.GEBRUIKER)
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
@@ -70,6 +71,7 @@ class StreepkeActivity : AppCompatActivity() {
             setOf(
                 R.id.nav_home,
                 R.id.nav_gallery,
+                R.id.nav_social,
                 R.id.nav_slideshow,
                // R.id.nav_periodeInstellingen
                   R.id.nav_dagInstellingen
@@ -145,6 +147,25 @@ class StreepkeActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            // User chose the "Settings" item, show the app settings UI...
+            val intent = Intent(this.applicationContext, SettingsActivity::class.java).apply {
+                val periode = intent.getParcelableExtra<Periode>(LoginActivity.PERIODE)
+                val persoon = intent.getParcelableExtra<Persoon>(LoginActivity.GEBRUIKER)
+                putExtra("persoon",persoon )
+                putExtra("periodekey",periode.key )
+
+            }
+            startActivity(intent)
+            true
+        }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 
 }

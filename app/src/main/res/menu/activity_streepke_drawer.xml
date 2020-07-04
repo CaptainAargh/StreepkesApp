@@ -14,6 +14,10 @@
             android:icon="@drawable/ranking"
             android:title="Overzicht" />
         <item
+            android:id="@+id/nav_social"
+            android:icon="@drawable/roddelboekicon"
+            android:title="Roddelboekske" />
+        <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/logicon"
             android:title="@string/menu_slideshow_admin" />

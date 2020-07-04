@@ -49,6 +49,11 @@
      android:name="be.kdg.scoutsappadmin.ui.log.LogFragment"
      android:label="@string/menu_slideshow_admin"
      tools:layout="@layout/fragment_groepsPaneel" />
-
+    <fragment
+        android:id="@+id/nav_social"
+        android:name="be.kdg.scoutsappadmin.ui.log.SocialFragment"
+        android:label="Social"
+        tools:layout="@layout/fragment_social"
+    />
 
 </navigation>
