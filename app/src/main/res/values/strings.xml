@@ -10,6 +10,7 @@
     <string name="menu_home_admin">Periode instellingen</string>
     <string name="menu_gallery_admin">Dag instellingen</string>
     <string name="menu_slideshow_admin">Log</string>
+    <string name="streepkesCheck">%1f$s          =>         %2$d</string>
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_periode">addPeriodeActivity</string>
@@ -125,8 +126,8 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Roddelboekje</string>
+    <string name="tab_text_2">Vertel nog is een mopje</string>
 
     <string name="login_naam"></string>
     <string name="login_pass"></string>
@@ -140,7 +141,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Overzicht</string>
     <string name="menu_slideshow">Under Construction</string>
-
+    <string name="title_activity_social_main">SocialMainActivity</string>
 
 
 </resources>

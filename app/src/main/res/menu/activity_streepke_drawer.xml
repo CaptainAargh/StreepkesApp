@@ -11,27 +11,29 @@
             android:title="Streepke toevoegen" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@mipmap/ic_overzicht_foreground"
+            android:icon="@drawable/ranking"
             android:title="Overzicht" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/logicon"
             android:title="@string/menu_slideshow_admin" />
         <item
             android:id="@+id/nav_dagInstellingen"
-            android:icon="@mipmap/ic_beer"
+            android:icon="@drawable/settings2"
             android:title="@string/menu_home_admin" />
-        <item
-            android:id="@+id/nav_periodeInstellingen"
-            android:icon="@mipmap/ic_overzicht"
-            android:title="@string/menu_gallery_admin" />
-
 
         <!--
-                <item
-                    android:id="@+id/nav_slideshow"
-                    android:icon="@drawable/ic_menu_slideshow"
-                    android:title="@string/menu_slideshow" />
-                -->
+
+<item
+    android:id="@+id/nav_periodeInstellingen"
+    android:icon="@drawable/settings2"
+    android:title="@string/menu_gallery_admin" />
+
+
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_slideshow" />
+        -->
     </group>
 </menu>

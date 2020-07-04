@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,8 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.streepke_row.view.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.time.ExperimentalTime
@@ -156,8 +159,8 @@ class OverzichtFragment : Fragment() {
                         }
                         toast.show()
                         rvAdapter.clear()
-                        fetchAllStreepkes(periode.key,0, "Uureke geleden" )
-                        rvAdapter.add(consumptieItem(" a moeder ", count))
+                        fetchAllStreepkes(periode.key, 0, "Uureke geleden")
+                        rvAdapter.add(consumptieItem(" a moeder ", count, 1))
                         rvAdapter.notifyDataSetChanged()
                     } else {
                         rvAdapter.clear()
@@ -177,6 +180,54 @@ class OverzichtFragment : Fragment() {
         var gesorteerd: MutableList<consumptieItem> = ArrayList<consumptieItem>()
         val consumptieLijst: MutableList<Consumptie> = ArrayList<Consumptie>()
 
+        @SuppressLint("NewApi")
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun checkRanking(p: Persoon): Int {
+            val ts = Math.round((Date().time / 1000).toDouble())
+
+            var rank = 0
+            val now: Instant = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Instant.now()
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val yesterday: Instant = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                now.minus(1, ChronoUnit.DAYS)
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val yesterday48: Instant = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                now.minus(2, ChronoUnit.DAYS)
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val top3: MutableList<Pair<String, Int>> = ArrayList<Pair<String, Int>>()
+            periode.periodePersonen!!.forEach {
+                var count = 0
+                it.persoonConsumpties!!.forEach {
+                    if (it.timeStamp / 1000 <= yesterday.toEpochMilli() / 1000 && yesterday48.toEpochMilli() / 1000 >= it.timeStamp / 1000) {
+                        count++
+                    }
+                }
+                val persoonNaam = it.persoonNaam.toString()
+                val pair = Pair(persoonNaam, count)
+                top3.add(pair)
+            }
+            top3.sortBy {
+                it.second
+            }
+            top3.reverse()
+
+            var count = 0
+            top3.subList(0, 3)
+            top3.forEach {
+                count++
+                if (it.first.equals(p.persoonNaam)) {
+                    rank = count
+                }
+            }
+            return rank
+        }
         periode.periodePersonen!!.forEach {
             var count = 0
             for (i in 0 until it.persoonConsumpties!!.size) {
@@ -200,6 +251,7 @@ class OverzichtFragment : Fragment() {
                     consumptieItem(
                         it.persoonNaam!!,
                         count
+                        , checkRanking(it)
                     )
                 )
             } else if (filter == "totaal") {
@@ -207,6 +259,7 @@ class OverzichtFragment : Fragment() {
                     consumptieItem(
                         it.persoonNaam!!,
                         count
+                        , checkRanking(it)
                     )
                 )
             }
@@ -326,7 +379,7 @@ class OverzichtFragment : Fragment() {
                         count += it.persoonConsumpties!!.size
                     }
                     if (filter == "Uureke geleden") {
-                        rvAdapter.add(consumptieItem(" a moeder ", count))
+                        rvAdapter.add(consumptieItem(" a moeder ", count, 1))
                         rvAdapter.notifyDataSetChanged()
 
                     } else {
@@ -380,16 +433,31 @@ class OverzichtFragment : Fragment() {
 
 }
 
+fun show(view: View) {
+    view.visibility = View.INVISIBLE
+}
+
 class consumptieItem(
-    val naam: String, val aantal: Int
+    val naam: String, val aantal: Int, val rank: Int
 ) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.streepke_row
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.streepke_row_ivMedaille.bringToFront()
+        if (rank == 1) {
+            viewHolder.itemView.streepke_row_ivMedaille.setBackgroundResource(R.drawable.rank1_v2)
+        } else if (rank == 2) {
+            viewHolder.itemView.streepke_row_ivMedaille.setBackgroundResource(R.drawable.rank2_v2)
+        } else if (rank == 3) {
+            viewHolder.itemView.streepke_row_ivMedaille.setBackgroundResource(R.drawable.rank3_v2)
+        } else {
+            viewHolder.itemView.streepke_row_ivMedaille.setBackgroundResource(0)
+        }
         viewHolder.itemView.streepke_row_txtNr.text = (position + 1).toString() + ". "
         viewHolder.itemView.streepke_row_txtNaam.text = naam
         viewHolder.itemView.streepke_row_txtAantal.text = aantal.toString()
+
     }
 }

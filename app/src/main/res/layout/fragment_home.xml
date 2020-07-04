@@ -35,7 +35,8 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        />
 
     <TextView
         android:id="@+id/txtBounce"
@@ -50,5 +51,42 @@
         app:layout_constraintEnd_toStartOf="@+id/fragment_home_ivStreepke"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain" />
+
+    <ImageView
+        android:id="@+id/homefrg_txtTop"
+        android:layout_width="410dp"
+        android:layout_height="210dp"
+        android:src="@color/toplayer"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_home_rvPersonenMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/homefrg_txtBottom"
+        android:layout_width="420dp"
+        android:layout_height="540dp"
+        android:layout_marginTop="76dp"
+        android:background="@color/bottomlayer"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homefrg_txtTop" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/home_streepke_gif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/beerfactory"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_home_rvPersonenMain" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

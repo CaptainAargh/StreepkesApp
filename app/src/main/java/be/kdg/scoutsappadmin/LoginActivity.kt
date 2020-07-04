@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
 
         btnLogin.setOnClickListener {
             val periodeSelected = getSelectedPeriod()
-            checkLogin(periodeSelected, txtNaam.text.toString(), txtPass.text.toString())
+            checkLogin(periodeSelected, txtNaam.text.replace("\\s".toRegex(), "").toString(), txtPass.text.toString())
             //checkAutoLogin(periodeSelected)
         }
     }
@@ -207,7 +207,7 @@ class LoginActivity : AppCompatActivity() {
                         periodePersonenList
                     )
 
-                    checkLogin(periode, txtNaam.text.toString(),txtPass.text.toString())
+                    checkLogin(periode, txtNaam.text.replace("\\s".toRegex(), ""),txtPass.text.toString())
                     Log.d("Login", "Namen van firebasePeriode " + periode)
 
                 }
@@ -237,7 +237,7 @@ class LoginActivity : AppCompatActivity() {
     @SuppressLint("CommitPrefEdits")
     private fun checkLogin(p: Periode, naam: String, pass: String) {
 
-        val naamLogin = txtNaam.text.toString()
+        val naamLogin = txtNaam.text.replace("\\s".toRegex(), "")
         val naamPass = txtPass.text.toString()
 
         for (i in 0 until p.periodePersonen!!.size) {
@@ -249,7 +249,7 @@ class LoginActivity : AppCompatActivity() {
                 intent.putExtra(GEBRUIKER, p.periodePersonen!![i])
                 startActivity(intent)
                 }
-                if (p.periodePersonen!![i].persoonNaam.equals(naamLogin) && p.periodePersonen!![i].persoonPass.equals(
+                if (p.periodePersonen!![i].persoonNaam!!.toLowerCase().equals(naamLogin.toLowerCase()) && p.periodePersonen!![i].persoonPass.equals(
                         naamPass
                     )
                 ) {

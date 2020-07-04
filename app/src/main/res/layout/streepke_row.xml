@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/streepke_row_ivBackground"
-        android:layout_width="398dp"
-        android:layout_height="46dp"
+        android:layout_width="450dp"
+        android:layout_height="75dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:padding="4dp"
-        android:paddingLeft="4dp"
+        android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -24,25 +25,24 @@
 
     <TextView
         android:id="@+id/streepke_row_txtNaam"
-        android:layout_width="234dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="188dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/streepke_row_txtAantal"
-        app:layout_constraintStart_toEndOf="@+id/streepke_row_txtNr"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.444" />
+        app:layout_constraintStart_toEndOf="@+id/streepke_row_ivMedaille"
+        app:layout_constraintTop_toTopOf="@+id/streepke_row_ivBackground" />
 
     <TextView
         android:id="@+id/streepke_row_txtAantal"
         android:layout_width="64dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/streepke_row_txtNaam"
@@ -51,16 +51,29 @@
     <TextView
         android:id="@+id/streepke_row_txtNr"
         android:layout_width="42dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         android:text="1."
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/streepke_row_txtNaam"
+        app:layout_constraintEnd_toStartOf="@+id/streepke_row_ivMedaille"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/streepke_row_ivMedaille"
+        android:layout_width="71dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/streepke_row_ivBackground"
+        app:layout_constraintEnd_toStartOf="@+id/streepke_row_txtNaam"
+        app:layout_constraintStart_toEndOf="@+id/streepke_row_txtNr"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.375" />
+        app:layout_constraintVertical_bias="0.547"
+        tools:srcCompat="@drawable/rank1_v2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

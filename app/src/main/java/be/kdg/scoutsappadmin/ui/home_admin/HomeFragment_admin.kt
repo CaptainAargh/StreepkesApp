@@ -315,7 +315,7 @@ class HomeFragment_admin : Fragment() {
                         )
                     )
                 }
-                for (i in 0 until personenList.size) {
+                for (i in 0..personenList.size-1) {
                     val consumpties = personenList[i].persoonConsumpties.values.toList()
                     var consumptiesSwitched = ArrayList<Consumptie>()
                     for (y in 0..consumpties.size-1) {

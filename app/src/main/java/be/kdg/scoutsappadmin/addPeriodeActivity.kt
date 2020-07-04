@@ -17,8 +17,9 @@ import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Dag
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Dag_Persoon
 import be.kdg.scoutsappadmin.fireBaseModels.FireBasePeriode_Persoon
 import be.kdg.scoutsappadmin.model.*
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.lang.Long.getLong
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -99,13 +100,13 @@ class addPeriodeActivity : AppCompatActivity() {
             val myRef = FirebaseDatabase.getInstance().getReference("")
             val cL: MutableList<Consumptie> = java.util.ArrayList<Consumptie>()
             //val p = Persoon("key",txtPersoonNaam.text.toString(), txtPersoonPass.text.toString(), cL ,Rol.GROEPSLEIDING)
-            addPeriode(periode, persoonLijst)
+            addPeriode(periode, persoon)
 
         }
 
     }
 
-    private fun addPeriode(periode: Periode, personen: List<Persoon>) {
+    private fun addPeriode(periode: Periode, persoon: Persoon) {
 
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
@@ -184,15 +185,13 @@ class addPeriodeActivity : AppCompatActivity() {
                 periode.periodePersonen!![i].persoonPass!!,
                 emptyMap(),
                 periode.periodePersonen!![i].persoonRol
-                )
+            )
             refPeriode_Personen.setValue(fbPeriodePersonen)
         }
 
     }
 
     private fun addPersoon(persoon: Persoon, periodeKey: String) {
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
         val key = FirebaseDatabase.getInstance().reference.child("periodes").push().key
         if (key == null) {
             Log.d("periodes", "keys push niet aangekregen van periodes")

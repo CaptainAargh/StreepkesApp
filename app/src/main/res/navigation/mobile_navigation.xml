@@ -38,15 +38,17 @@
         android:name="be.kdg.scoutsappadmin.ui.home_admin.HomeFragment_admin"
         android:label="@string/menu_gallery_admin"
         tools:layout="@layout/fragment_dag" />
-    <fragment
-        android:id="@+id/nav_periodeInstellingen"
-        android:name="be.kdg.scoutsappadmin.ui.dag.DagFragment"
-        android:label="@string/menu_gallery_admin"
-        tools:layout="@layout/fragment_home_admin" />
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="be.kdg.scoutsappadmin.ui.log.LogFragment"
-        android:label="@string/menu_slideshow_admin"
-        tools:layout="@layout/fragment_groepsPaneel" />
+    <!--
+ <fragment
+     android:id="@+id/nav_periodeInstellingen"
+     android:name="be.kdg.scoutsappadmin.ui.dag.dagInstellingen"
+     android:label="@string/menu_gallery_admin"
+     tools:layout="@layout/fragment_home_admin" />-->
+ <fragment
+     android:id="@+id/nav_slideshow"
+     android:name="be.kdg.scoutsappadmin.ui.log.LogFragment"
+     android:label="@string/menu_slideshow_admin"
+     tools:layout="@layout/fragment_groepsPaneel" />
+
 
 </navigation>
