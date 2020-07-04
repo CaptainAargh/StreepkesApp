@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 
 class LoadingScreenActivity : AppCompatActivity() {
-    val SPLASH_TIME_OUT:Long = 50 // 5150 perfect sec
+    val SPLASH_TIME_OUT:Long = 5150 // 5150 perfect sec
     override fun onCreate(savedInstanceState: Bundle?) {
             // This is the loading time of the splash screen
                 super.onCreate(savedInstanceState)
