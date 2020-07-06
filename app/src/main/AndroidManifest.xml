@@ -32,11 +32,7 @@
             android:name=".StreepkeActivity"
             android:label="@string/title_activity_streepke"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".OverzichtActivity"
-            android:theme="@style/AppTheme.SlideActivityTheme" />
-        <activity android:name=".StreepkeMainActivity" />
-        <activity android:name=".ui.home_admin.HomeAddRowActivity" />
+
         <activity
             android:name=".ui.addPeriodeActivity"
             android:label="@string/title_activity_add_periode"

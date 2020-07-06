@@ -449,9 +449,6 @@ class HomeFragment_admin : Fragment() {
         }
         val tussenLijst = periode.periodeDagen
         Log.d("dagdatumparsing", "Size :" + tussenLijst!!.size)
-        Log.d("dagdatumparsing", "Element 1 :" + tussenLijst[0].dagDatum.toString())
-        Log.d("dagdatumparsing", "Element 2 :" + tussenLijst[1].dagDatum.toString())
-        Log.d("dagdatumparsing", "Element 3 :" + tussenLijst[2].dagDatum.toString())
 
         for (j in 0..tussenLijst.size - 1) {
             Log.d("dagdatumparsing", tussenLijst.get(j).dagDatum!!)

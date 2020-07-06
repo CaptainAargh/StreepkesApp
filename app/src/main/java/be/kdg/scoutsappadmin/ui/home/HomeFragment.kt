@@ -354,6 +354,13 @@ class HomeFragment : Fragment() {
 
 
                                     }
+                                if (count == totaalStreepkes) {
+                                    setInvisible(gifLoader)
+                                    setInvisible(txtBottom)
+                                    setInvisible(txtTop)
+                                    setVisible(header)
+                                    setVisible(navigationView)
+                                }
                                 val SPLASH_TIME_OUT:Long = (2200*totaalStreepkes).toLong() // 5150 perfect sec
                                 Handler().postDelayed({
                                     // This method will be executed once the timer is over
