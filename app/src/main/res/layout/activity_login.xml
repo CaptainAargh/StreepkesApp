@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login">
+    android:background="@color/reactiefGreenDark">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -13,16 +13,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background_login" />
+        app:srcCompat="@drawable/logosintpaulus" />
 
     <Spinner
         android:id="@+id/login_spinner.periode"
         android:layout_width="0dp"
         android:layout_height="59dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="330dp"
+        android:layout_marginBottom="200dp"
         android:background="@drawable/rounded_txt_login"
         android:backgroundTint="#FFFFFF"
         android:textAlignment="center"
@@ -39,6 +39,7 @@
         android:layout_height="?actionBarSize"
         android:layout_margin="20dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_corner"
@@ -50,6 +51,7 @@
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/login.txt.pass"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_spinner.periode" />
 
@@ -72,6 +74,7 @@
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/cbSave"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login.txt.name" />
 
@@ -80,19 +83,18 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:background="@drawable/rounded_corner_button"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="Log in"
         android:textColor="#777"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbSave" />
+        app:layout_constraintTop_toBottomOf="@+id/cbSave"
+        android:backgroundTint="@color/reactiefGreyDark"/>
 
     <CheckBox
         android:id="@+id/cbSave"

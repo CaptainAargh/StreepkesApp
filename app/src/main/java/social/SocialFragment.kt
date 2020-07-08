@@ -63,7 +63,10 @@ class SocialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rvRoddels = view.findViewById<RecyclerView>(R.id.frg_soocial_rvRoddels)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+        val linearLayoutManager =  LinearLayoutManager(activity)
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd  = true
+        val layoutManager: RecyclerView.LayoutManager = linearLayoutManager
         rvRoddels.setLayoutManager(layoutManager)
         fetchAllRoddels()
 

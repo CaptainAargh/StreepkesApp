@@ -10,8 +10,8 @@
         android:id="@+id/roddel_detail_fullImg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/roddel_detail_title"
@@ -33,13 +33,11 @@
 
     <ImageView
         android:id="@+id/roddel_detail_iv"
-        android:layout_width="362dp"
+        android:layout_width="0dp"
         android:layout_height="195dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/roddel_detail_tekst"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roddel_detail_title"
@@ -50,45 +48,45 @@
         android:layout_width="0dp"
         android:layout_height="277dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/border"
-        android:scrollbars="vertical"
-        android:padding="10dp"
 
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:scrollbars="vertical"
         android:text="TextView"
         android:textColor="@color/grey"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/roddel_detail_autheur"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roddel_detail_iv" />
 
     <TextView
         android:id="@+id/roddel_detail_autheur"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/border"
         android:padding="10dp"
-    android:scrollbars="vertical"
+        android:scrollbars="vertical"
         android:text="TextView"
         android:textColor="@color/reactiefGreenDark"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/roddel_detail_btn_gaterug"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roddel_detail_tekst" />
 
     <Button
         android:id="@+id/roddel_detail_btn_gaterug"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:text="Ga terug naar het roddelboekje"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roddel_detail_autheur" />
 </androidx.constraintlayout.widget.ConstraintLayout>

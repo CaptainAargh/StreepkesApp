@@ -83,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             val periodeSelected = getSelectedPeriod()
             checkLogin(periodeSelected, txtNaam.text.replace("\\s".toRegex(), "").toString(), txtPass.text.toString())
+
             //checkAutoLogin(periodeSelected)
         }
     }
@@ -235,15 +236,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @SuppressLint("CommitPrefEdits")
-    private fun checkLogin(p: Periode, naam: String, pass: String) {
-
+    private fun checkLogin(p: Periode, naam: String, pass: String){
+        var valid = false
         val naamLogin = txtNaam.text.replace("\\s".toRegex(), "")
         val naamPass = txtPass.text.toString()
 
         for (i in 0 until p.periodePersonen!!.size) {
-            if (p.periodePersonen!![i].persoonNaam.equals(naam) && p.periodePersonen!![i].persoonPass.equals(
+            if (p.periodePersonen!![i].persoonNaam!!.toLowerCase().equals(naam.toLowerCase()) && p.periodePersonen!![i].persoonPass.equals(
                     pass
                 ) ){
+                valid = true
                 val intent = Intent(this, StreepkeActivity::class.java)
                 intent.putExtra(PERIODE, p)
                 intent.putExtra(GEBRUIKER, p.periodePersonen!![i])
@@ -271,6 +273,7 @@ class LoginActivity : AppCompatActivity() {
                             sharedPreferences.getBoolean("autoLoginCheck", false).toString()
                         )
                     }
+                    valid = true
                     val intent = Intent(this, StreepkeActivity::class.java)
                     intent.putExtra(PERIODE, p)
                     intent.putExtra(GEBRUIKER, p.periodePersonen!![i])

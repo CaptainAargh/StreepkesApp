@@ -222,7 +222,7 @@ class OverzichtFragment : Fragment() {
             top3.subList(0, 3)
             top3.forEach {
                 count++
-                if (it.first.equals(p.persoonNaam)) {
+                if (it.first.equals(p.persoonNaam) && it.second>0) {
                     rank = count
                 }
             }

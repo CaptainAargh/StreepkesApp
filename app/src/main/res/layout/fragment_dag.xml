@@ -71,7 +71,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:text="Selecteer een periode"
+        android:text="Selecteer een lijst"
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/frgDag_Spinner_Periode"
         app:layout_constraintEnd_toEndOf="parent"

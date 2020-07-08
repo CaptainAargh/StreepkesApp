@@ -35,13 +35,15 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_home_rvPersonenMain"
-        app:layout_constraintVertical_bias="0.0"
-        />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/txtBounce"
         android:layout_width="309dp"
         android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/bungee_inline"
         android:text="   Strepeke('s) dabei ? "
         android:textAlignment="viewStart"

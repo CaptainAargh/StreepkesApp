@@ -29,11 +29,11 @@ class roddeldetailzonderphotoactivity : AppCompatActivity() {
         tekst.text = intentTekst
         if (intentAnoniem) {
             autheur.text = "Voor verdere vragen en opmerkingen moet ge maar is rond vragen bij de rest vd leiding "+
-                    " \n De ontwikkelaar van de app is niet verantwoordelijk voor mogelijk drama's. En no worries die privacy wetgeving van den app is helemaal in orde ze "
+                    " \n De ontwikkelaar van de app is niet verantwoordelijk voor mogelijk drama's, gebroken hartjes en andere emotionele gevolgen"
 
         } else {
             autheur.text = "Voor verdere vragen en opmerkingen verwijs ik u door naar de auteur van dit bericht : $intentautheur" +
-                    " \n De ontwikkelaar van de app is niet verantwoordelijk voor mogelijk drama's. En no worries die privacy wetgeving van den app is helemaal in orde ze "
+                    " \n De ontwikkelaar van de app is niet verantwoordelijk voor mogelijk drama's, gebroken hartjes en andere emotionele gevolgen"
 
         }
         autheur.setMovementMethod(ScrollingMovementMethod())

@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         val periodeDagenNaam: MutableList<String> = ArrayList<String>()
-        val addStreepke = root.findViewById<Button>(R.id.frgStreepke_btn_addStreepjes)
+
 
 
         periode.periodeDagen!!.forEach { dag ->
@@ -153,6 +153,7 @@ class HomeFragment : Fragment() {
 
         var itemsGeselecteerd: MutableList<persoonItem> = ArrayList<persoonItem>()
 
+
         personenAdapter.setOnItemClickListener { item, view ->
             val i = item as persoonItem
             val itemPosition = recyclerView.getChildAdapterPosition(view)
@@ -212,7 +213,7 @@ class HomeFragment : Fragment() {
         itemsGeselecteerd
 
         ivButton.setOnClickListener {
-            if (itemsGeselecteerd.size<1) return@setOnClickListener
+            if (itemsGeselecteerd.size < 1) return@setOnClickListener
 
             var personenString =
                 "Dubbelcheckt da nog is effeke \n"
@@ -226,9 +227,10 @@ class HomeFragment : Fragment() {
                     }
             itemsGeselecteerd.distinct()
             itemsGeselecteerd.forEach {
-               //personenString += "\n ${it.persoon.persoonNaam}            =>          " +" ${it.count}"
-                val aantalSpaces = (30-it.persoon.persoonNaam!!.length)
-                personenString += "\n${it.persoon.persoonNaam!!.padEnd(aantalSpaces)}=>${it.count.toString().padStart(10).removeSurrounding(" ")}\n"
+                //personenString += "\n ${it.persoon.persoonNaam}            =>          " +" ${it.count}"
+                val aantalSpaces = (30 - it.persoon.persoonNaam!!.length)
+                personenString += "\n${it.persoon.persoonNaam!!.padEnd(aantalSpaces)}=>${it.count.toString()
+                    .padStart(10).removeSurrounding(" ")}\n"
             }
             /*            val formatted =
                             geselecteerdePersonen.groupingBy { it.persoonNaam }.eachCount().toString()
@@ -246,7 +248,7 @@ class HomeFragment : Fragment() {
             }
 
             fun setInvisible(v: View) {
-            v.visibility = View.GONE
+                v.visibility = View.GONE
             }
 
             var totaalStreepkes = 0
@@ -266,39 +268,47 @@ class HomeFragment : Fragment() {
 
 
             var count = 0;
+
+            val pref = context!!.getSharedPreferences("animatiePref", Context.MODE_PRIVATE)
             val alertDialog =
                 AlertDialog.Builder(root.context, R.style.PopUpConfirmConsumpties)
+
+
+
+
             alertDialog.setTitle("Strepke dabei")
             Log.d("personenString", "String personen " + personenString)
-            alertDialog.setMessage(personenString)
 
+
+            alertDialog.setMessage(personenString)
             alertDialog.setPositiveButton(
                 "Joat kzen zeker",
                 object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        for (i in 0 until itemsGeselecteerd.size) {
-                            for (j in 0 until itemsGeselecteerd[i].count) {
-                                val refPeriode_Personen_Streepkes =
-                                    FirebaseDatabase.getInstance().reference.child("periodes/${periode.key}/periodePersonen/${itemsGeselecteerd[i].persoon.key}/persoonConsumpties")
-                                        .push()
-                                val refPeriode_Personen_StreepkesKey =
-                                    refPeriode_Personen_Streepkes.key
+                        if (pref.getBoolean("animatie", true) == true) {
+                            for (i in 0 until itemsGeselecteerd.size) {
+                                for (j in 0 until itemsGeselecteerd[i].count) {
+                                    val refPeriode_Personen_Streepkes =
+                                        FirebaseDatabase.getInstance().reference.child("periodes/${periode.key}/periodePersonen/${itemsGeselecteerd[i].persoon.key}/persoonConsumpties")
+                                            .push()
+                                    val refPeriode_Personen_StreepkesKey =
+                                        refPeriode_Personen_Streepkes.key
 
-                                if (refPeriode_Personen_StreepkesKey == null) {
-                                    Log.d("periodes", "keys push niet aangekregen van periodes")
-                                }
-                                val c = Consumptie(
-                                    refPeriode_Personen_StreepkesKey,
-                                    persoon.persoonNaam,
-                                    persoon.key,
-                                    System.currentTimeMillis()
-                                )
-                                refPeriode_Personen_Streepkes.setValue(c)
-                                    .addOnSuccessListener {
-                                        nrStreepke++
-                                        count++
-                                        var totaalStreepkes2 = itemsGeselecteerd.size.toString()
-                                        val spanString2 = SpannableString(nrStreepke.toString())
+                                    if (refPeriode_Personen_StreepkesKey == null) {
+                                        Log.d("periodes", "keys push niet aangekregen van periodes")
+                                    }
+                                    val c = Consumptie(
+                                        refPeriode_Personen_StreepkesKey,
+                                        persoon.persoonNaam,
+                                        persoon.key,
+                                        System.currentTimeMillis()
+                                    )
+                                    refPeriode_Personen_Streepkes.setValue(c)
+                                        .addOnSuccessListener {
+                                            nrStreepke++
+                                            count++
+                                            var totaalStreepkes2 = itemsGeselecteerd.size.toString()
+                                            val spanString2 = SpannableString(nrStreepke.toString())
 
 /*                                        for (w in 0 until 10) {
                                             for (y in 0 until 10)
@@ -308,52 +318,52 @@ class HomeFragment : Fragment() {
                                                     android.R.color.transparent
                                                 )
                                         }*/
-                                        val dst: Bitmap = Bitmap.createBitmap(
-                                            originalBm,
-                                            0,
-                                            0,
-                                            originalBm.width,
-                                            originalBm.height / count
-                                        )
+                                            val dst: Bitmap = Bitmap.createBitmap(
+                                                originalBm,
+                                                0,
+                                                0,
+                                                originalBm.width,
+                                                originalBm.height / count
+                                            )
 
 
-                                        val omgezet = bitmapToDrawable(dst)
-                                        val totaalPersoon = itemsGeselecteerd[i].count
-                                        var streepkeVoor =
-                                            itemsGeselecteerd[i].persoon.persoonNaam.toString()
-                                        val nr = j + 1
-                                        val toast = Toast.makeText(
-                                            root.context.applicationContext,
-                                            "Streepke $nr van $totaalPersoon \n \nvoor onze \n$streepkeVoor \n \n toegevoegd aan de lijst ",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        if (totaalPersoon < 2) {
-                                            toast.setText("Streepke voor onze \n$streepkeVoor \n \n toegevoegd aan de lijst ")
+                                            val omgezet = bitmapToDrawable(dst)
+                                            val totaalPersoon = itemsGeselecteerd[i].count
+                                            var streepkeVoor =
+                                                itemsGeselecteerd[i].persoon.persoonNaam.toString()
+                                            val nr = j + 1
+                                            val toast = Toast.makeText(
+                                                root.context.applicationContext,
+                                                "Streepke $nr van $totaalPersoon \n \nvoor onze \n$streepkeVoor \n \n toegevoegd aan de lijst ",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            if (totaalPersoon < 2) {
+                                                toast.setText("Streepke voor onze \n$streepkeVoor \n \n toegevoegd aan de lijst ")
+                                            }
+
+                                            val group = toast.view as ViewGroup
+                                            val messageTextView =
+                                                group.getChildAt(0) as TextView
+                                            messageTextView.setTextSize(30f)
+                                            val bgLoader = R.drawable.beerloader.toDrawable()
+                                            bgLoader
+                                            messageTextView.setTextColor(R.color.black)
+                                            messageTextView.setBackgroundResource(R.color.transparant)
+                                            //messageTextView.height = originalBm.height
+                                            // toast.setGravity(0, 0, -1)
+                                            //messageTextView.height = 800
+                                            //  messageTextView.width = 800
+                                            toast.view.background.alpha = 80
+                                            toast.show()
+                                            toast.setMargin(0F, -2F)
+                                            setVisible(gifLoader)
+                                            setVisible(txtBottom)
+                                            setVisible(txtTop)
+                                            setInvisible(header)
+                                            setInvisible(navigationView)
                                         }
 
-                                        val group = toast.view as ViewGroup
-                                        val messageTextView =
-                                            group.getChildAt(0) as TextView
-                                        messageTextView.setTextSize(30f)
-                                        val bgLoader = R.drawable.beerloader.toDrawable()
-                                        bgLoader
-                                        messageTextView.setTextColor(R.color.black)
-                                        messageTextView.setBackgroundResource(R.color.transparant)
-                                        //messageTextView.height = originalBm.height
-                                       // toast.setGravity(0, 0, -1)
-                                        //messageTextView.height = 800
-                                      //  messageTextView.width = 800
-                                        toast.view.background.alpha = 80
-                                        toast.show()
-                                        toast.setMargin(0F,-2F)
-                                        setVisible(gifLoader)
-                                        setVisible(txtBottom)
-                                        setVisible(txtTop)
-                                        setInvisible(header)
-                                        setInvisible(navigationView)
-
-
-                                    }
+                                }
                                 if (count == totaalStreepkes) {
                                     setInvisible(gifLoader)
                                     setInvisible(txtBottom)
@@ -361,7 +371,8 @@ class HomeFragment : Fragment() {
                                     setVisible(header)
                                     setVisible(navigationView)
                                 }
-                                val SPLASH_TIME_OUT:Long = (2200*totaalStreepkes).toLong() // 5150 perfect sec
+                                val SPLASH_TIME_OUT: Long =
+                                    (2200 * totaalStreepkes).toLong() // 5150 perfect sec
                                 Handler().postDelayed({
                                     // This method will be executed once the timer is over
                                     setInvisible(gifLoader)
@@ -373,12 +384,45 @@ class HomeFragment : Fragment() {
                                     // Start your app main activity
                                     // close this activity
                                 }, SPLASH_TIME_OUT)
-                                Log.d("addPeriodePersoon", "Jeej succes" + c.toString())
 
                             }
+                        } else {
 
+                            for (i in 0 until itemsGeselecteerd.size) {
+                                for (j in 0 until itemsGeselecteerd[i].count) {
+                                    val refPeriode_Personen_Streepkes =
+                                        FirebaseDatabase.getInstance().reference.child("periodes/${periode.key}/periodePersonen/${itemsGeselecteerd[i].persoon.key}/persoonConsumpties")
+                                            .push()
+                                    val refPeriode_Personen_StreepkesKey =
+                                        refPeriode_Personen_Streepkes.key
+
+                                    if (refPeriode_Personen_StreepkesKey == null) {
+                                        Log.d("periodes", "keys push niet aangekregen van periodes")
+                                    }
+                                    val c = Consumptie(
+                                        refPeriode_Personen_StreepkesKey,
+                                        persoon.persoonNaam,
+                                        persoon.key,
+                                        System.currentTimeMillis()
+                                    )
+                                    refPeriode_Personen_Streepkes.setValue(c)
+                                }
+                            }
+
+                            if (totaalStreepkes > 1) {
+                                val toast = Toast.makeText(
+                                    root.context.applicationContext,
+                                    "Streepkes toegevoegd aan de lijst",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val toast = Toast.makeText(
+                                    root.context.applicationContext,
+                                    "Streepke toegevoegd aan de lijst",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-
                         // refPeriode_Personen_Streepkes.setValue(c)
                         getFragmentManager()!!.beginTransaction()
                             .detach(root.findFragment())
